@@ -7,13 +7,9 @@
 
 #include <boost/fusion/include/adapt_struct.hpp>
 
-BOOST_FUSION_ADAPT_STRUCT(
-    lightex::ast::PlainText,
-    (std::string, text))
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::PlainText, (std::string, text))
 
-BOOST_FUSION_ADAPT_STRUCT(
-    lightex::ast::Program,
-    (std::list<lightex::ast::ProgramNode>, nodes))
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Program, (std::list<lightex::ast::ProgramNode>, nodes))
 
 // BOOST_FUSION_ADAPT_STRUCT(
 //     CommandDefinition,
@@ -35,10 +31,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 //     (std::string, text)
 // )
 
-BOOST_FUSION_ADAPT_STRUCT(
-    lightex::ast::Command,
-    (std::string, name),
-    (std::list<lightex::ast::Program>, arguments))
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Command, (std::string, name), (std::list<lightex::ast::Program>, arguments))
 
 // BOOST_FUSION_ADAPT_STRUCT(
 //     TabularEnvironment,

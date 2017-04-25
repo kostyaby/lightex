@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
 #include <list>
+#include <string>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 namespace lightex {
 namespace ast {
@@ -20,10 +20,9 @@ struct ProgramNode;
 struct Command;
 // struct TabularEnvironment;
 
-struct ProgramNode : x3::variant<x3::forward_ast<PlainText>,
-                                 x3::forward_ast<Command>> {
-    using base_type::base_type;
-    using base_type::operator=;
+struct ProgramNode : x3::variant<x3::forward_ast<PlainText>, x3::forward_ast<Command>> {
+  using base_type::base_type;
+  using base_type::operator=;
 };
 
 struct Program : x3::position_tagged {

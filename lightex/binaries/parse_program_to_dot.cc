@@ -1,17 +1,18 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 
 #include <lightex/lightex.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   const char* input_file;
   const char* output_file;
   if (argc == 3) {
     input_file = argv[1];
     output_file = argv[2];
   } else {
-    std::cerr << "Error: invalid number of arguments! (Expected 2, got " << std::to_string(argc - 1) << ")" << std::endl;
+    std::cerr << "Error: invalid number of arguments! (Expected 2, got " << std::to_string(argc - 1) << ")"
+              << std::endl;
     return 1;
   }
 
@@ -22,10 +23,8 @@ int main(int argc, char **argv) {
   }
 
   std::string storage;
-  in.unsetf(std::ios::skipws); // Avoids white space skipping.
-  std::copy(std::istream_iterator<char>(in),
-            std::istream_iterator<char>(),
-            std::back_inserter(storage));
+  in.unsetf(std::ios::skipws);  // Avoids white space skipping.
+  std::copy(std::istream_iterator<char>(in), std::istream_iterator<char>(), std::back_inserter(storage));
   in.close();
 
   std::size_t failed_at;
@@ -46,4 +45,3 @@ int main(int argc, char **argv) {
 
   return 0;
 }
-

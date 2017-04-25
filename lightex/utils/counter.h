@@ -11,6 +11,7 @@ class Counter {
   Counter(int initial_value = 0);
 
   int GetValueAndIncrease();
+
  private:
   int value_;
 };
