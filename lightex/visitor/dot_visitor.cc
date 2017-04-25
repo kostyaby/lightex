@@ -1,9 +1,25 @@
 #include <lightex/visitor/dot_visitor.h>
 
-#include <string>
-
 namespace lightex {
 namespace visitor {
+namespace {
+
+std::string EscapeForDot(const std::string& s) {
+  std::string result;
+  for (char c : s) {
+    switch (c) {
+      case '\\': {
+        result += '\\';
+        break;
+      }
+    }
+
+    result += c;
+  }
+
+  return result;
+}
+}  // namespace
 
 DotVisitor::DotVisitor(std::string* output) : output_(output) {}
 
@@ -33,7 +49,7 @@ NodeId DotVisitor::operator()(const ast::Command& command) {
 
 NodeId DotVisitor::operator()(const ast::PlainText& plain_text) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + plain_text.text + ">\"];\n");
+  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text.text) + ">\"];\n");
 
   return node_id;
 }

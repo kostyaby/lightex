@@ -5,8 +5,8 @@
 #include <lightex/lightex.h>
 
 int main(int argc, char** argv) {
-  const char* input_file;
-  const char* output_file;
+  char const* input_file;
+  char const* output_file;
   if (argc == 3) {
     input_file = argv[1];
     output_file = argv[2];

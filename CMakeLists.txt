@@ -12,6 +12,7 @@ get_filename_component(lightex_root . ABSOLUTE)
 include_directories(${lightex_root})
 set(lightex_src_files ${lightex_src_files}
     ${lightex_root}/lightex/lightex.cc
+    ${lightex_root}/lightex/utils/comment_remover.cc
     ${lightex_root}/lightex/utils/counter.cc
     ${lightex_root}/lightex/visitor/dot_visitor.cc)
 add_library(lightex STATIC ${lightex_src_files})

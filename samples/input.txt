@@ -1,1 +1,3 @@
-\textbf{Hey there!}  {\text\\ \emph{We need to go deeper! Or so Leo says.}}
+\textbf{Hey there!}
+% This is a comment
+{\text\\ \emph{We need to go deeper! Or so Leo says.}} % this is a comment as well
