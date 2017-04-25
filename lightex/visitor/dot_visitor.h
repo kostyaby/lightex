@@ -23,12 +23,14 @@ class DotVisitor : public boost::static_visitor<NodeId> {
 
   NodeId operator()(const ast::PlainText& plain_text);
 
+  NodeId operator()(const ast::MathText& math_text);
+
  private:
   NodeId GenerateNodeId();
   void AppendToOutput(const std::string& s);
 
   utils::Counter counter_;
-  std::string* output_; // Not owned;
+  std::string* output_;  // Not owned;
 };
 
 }  // namespace visitor

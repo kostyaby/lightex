@@ -26,10 +26,7 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Program, (std::list<lightex::ast::Progra
 //     (Program, post_program)
 // )
 
-// BOOST_FUSION_ADAPT_STRUCT(
-//     MathematicalText,
-//     (std::string, text)
-// )
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::MathText, (std::string, text))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Command, (std::string, name), (std::list<lightex::ast::Program>, arguments))
 

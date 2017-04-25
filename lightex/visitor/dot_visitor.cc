@@ -54,6 +54,13 @@ NodeId DotVisitor::operator()(const ast::PlainText& plain_text) {
   return node_id;
 }
 
+NodeId DotVisitor::operator()(const ast::MathText& math_text) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"MATH_TEXT = <" + EscapeForDot(math_text.text) + ">\"];\n");
+
+  return node_id;
+}
+
 NodeId DotVisitor::GenerateNodeId() {
   return "node_" + std::to_string(counter_.GetValueAndIncrease());
 }

@@ -36,4 +36,10 @@ digraph d {
   node_5 -> node_8;
   node_1 -> node_5;
   node_0 -> node_1;
+  node_19 [label="MATH_TEXT = <\\frac{a}{b}>"];
+  node_0 -> node_19;
+  node_20 [label="MATH_TEXT = <
+a = b \\leftrightarrow b = a
+>"];
+  node_0 -> node_20;
 }

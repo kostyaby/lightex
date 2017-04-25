@@ -16,11 +16,11 @@ struct Program;
 struct ProgramNode;
 // struct CommandDefinition;
 // struct EnvironmentDefinition;
-// struct MathematicalText;
+struct MathText;
 struct Command;
 // struct TabularEnvironment;
 
-struct ProgramNode : x3::variant<x3::forward_ast<PlainText>, x3::forward_ast<Command>> {
+struct ProgramNode : x3::variant<x3::forward_ast<PlainText>, x3::forward_ast<Command>, x3::forward_ast<MathText>> {
   using base_type::base_type;
   using base_type::operator=;
 };
@@ -46,9 +46,9 @@ struct PlainText : x3::position_tagged {
 //   Program post_program;
 // };
 
-// struct MathematicalText : x3::position_tagged {
-//   string_t text;
-// };
+struct MathText : x3::position_tagged {
+  std::string text;
+};
 
 struct Command : x3::position_tagged {
   std::string name;

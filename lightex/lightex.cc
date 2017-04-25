@@ -9,20 +9,24 @@
 #include <boost/variant/static_visitor.hpp>
 
 namespace lightex {
+namespace {
+const int kFailedSnippetLength = 30;
+}  // namespace
 
-bool ParseProgramToDot(const std::string& input, std::size_t* failed_at, std::string* output) {
+bool ParseProgramToDot(const std::string& input, std::string* failed_snippet, std::string* output) {
   namespace x3 = boost::spirit::x3;
 
-  std::string processed_input = utils::RemoveCommentsFromProgram(input);
+  std::string preprocessed_input = utils::RemoveCommentsFromProgram(input);
 
   ast::Program ast;
-  std::string::const_iterator start = processed_input.begin();
+  std::string::const_iterator start = preprocessed_input.begin();
   std::string::const_iterator iter = start;
-  std::string::const_iterator end = processed_input.end();
+  std::string::const_iterator end = preprocessed_input.end();
   bool r = x3::phrase_parse(iter, end, grammar::program, x3::space, ast);
   if (!r || iter < end) {
-    if (failed_at) {
-      *failed_at = iter - start;
+    if (failed_snippet) {
+      std::size_t failed_at = iter - start;
+      *failed_snippet = preprocessed_input.substr(failed_at, failed_at + kFailedSnippetLength);
     }
     return false;
   }

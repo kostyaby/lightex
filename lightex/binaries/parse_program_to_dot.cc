@@ -27,11 +27,11 @@ int main(int argc, char** argv) {
   std::copy(std::istream_iterator<char>(in), std::istream_iterator<char>(), std::back_inserter(storage));
   in.close();
 
-  std::size_t failed_at;
+  std::string failed_snippet;
   std::string result;
-  if (!lightex::ParseProgramToDot(storage, &failed_at, &result)) {
+  if (!lightex::ParseProgramToDot(storage, &failed_snippet, &result)) {
     std::cerr << "Error: failed to parse input!" << std::endl;
-    std::cerr << "Failed at: " << storage.substr(failed_at, failed_at + 30) << std::endl;
+    std::cerr << "Failed at: " << failed_snippet << std::endl;
     return 1;
   }
 
