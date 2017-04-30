@@ -19,8 +19,12 @@ struct ProgramNode;
 struct MathText;
 struct Command;
 // struct TabularEnvironment;
+struct Environment;
 
-struct ProgramNode : x3::variant<x3::forward_ast<PlainText>, x3::forward_ast<Command>, x3::forward_ast<MathText>> {
+struct ProgramNode : x3::variant<x3::forward_ast<PlainText>,
+                                 x3::forward_ast<Command>,
+                                 x3::forward_ast<MathText>,
+                                 x3::forward_ast<Environment>> {
   using base_type::base_type;
   using base_type::operator=;
 };
@@ -60,10 +64,12 @@ struct Command : x3::position_tagged {
 //   vector_t<string_t> content;
 // };
 
-// struct Environment : x3::position_tagged {
-//   string_t column_configuration;
-//   vector_t<string_t> content;
-// };
+struct Environment : x3::position_tagged {
+  std::string begin_name;
+  std::list<Program> arguments;
+  Program body;
+  std::string end_name;
+};
 
 }  // namespace ast
 }  // namespace lightex

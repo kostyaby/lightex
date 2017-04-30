@@ -25,6 +25,8 @@ class DotVisitor : public boost::static_visitor<NodeId> {
 
   NodeId operator()(const ast::MathText& math_text);
 
+  NodeId operator()(const ast::Environment& environment);
+
  private:
   NodeId GenerateNodeId();
   void AppendToOutput(const std::string& s);

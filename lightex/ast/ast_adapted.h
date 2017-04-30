@@ -34,3 +34,9 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Command, (std::string, name), (std::list
 //     TabularEnvironment,
 //     (vector_t<std::string>, text)
 // )
+
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Environment,
+                          (std::string, begin_name),
+                          (std::list<lightex::ast::Program>, arguments),
+                          (lightex::ast::Program, body),
+                          (std::string, end_name));

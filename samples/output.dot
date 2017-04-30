@@ -36,10 +36,36 @@ digraph d {
   node_5 -> node_8;
   node_1 -> node_5;
   node_0 -> node_1;
-  node_19 [label="MATH_TEXT = <\\frac{a}{b}>"];
+  node_19 [label="ENVIRONMENT = <begin_name=a end_name=a>"];
+  node_20 [label="PROGRAM"];
+  node_21 [label="PLAIN_TEXT = <x=3>"];
+  node_20 -> node_21;
+  node_19 -> node_20 [style=dotted];
+  node_22 [label="PROGRAM"];
+  node_23 [label="ENVIRONMENT = <begin_name=b end_name=b>"];
+  node_24 [label="PROGRAM"];
+  node_25 [label="PLAIN_TEXT = <1>"];
+  node_24 -> node_25;
+  node_23 -> node_24 [style=dotted];
+  node_26 [label="PROGRAM"];
+  node_27 [label="PLAIN_TEXT = <2>"];
+  node_26 -> node_27;
+  node_23 -> node_26 [style=dotted];
+  node_28 [label="PROGRAM"];
+  node_29 [label="PLAIN_TEXT = <3>"];
+  node_28 -> node_29;
+  node_23 -> node_28 [style=dotted];
+  node_30 [label="PROGRAM"];
+  node_31 [label="MATH_TEXT = <a = \\frac{b + c}{d}>"];
+  node_30 -> node_31;
+  node_23 -> node_30;
+  node_22 -> node_23;
+  node_19 -> node_22;
   node_0 -> node_19;
-  node_20 [label="MATH_TEXT = <
+  node_32 [label="MATH_TEXT = <\\frac{a}{b}>"];
+  node_0 -> node_32;
+  node_33 [label="MATH_TEXT = <
 a = b \\leftrightarrow b = a
 >"];
-  node_0 -> node_20;
+  node_0 -> node_33;
 }

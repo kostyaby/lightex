@@ -61,6 +61,22 @@ NodeId DotVisitor::operator()(const ast::MathText& math_text) {
   return node_id;
 }
 
+NodeId DotVisitor::operator()(const ast::Environment& environment) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <begin_name=" + environment.begin_name);
+  AppendToOutput(" end_name=" + environment.end_name + ">\"];\n");
+
+  for (const auto& argument : environment.arguments) {
+    NodeId child_id = (*this)(argument);
+    AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
+  }
+
+  NodeId body_child_id = (*this)(environment.body);
+  AppendToOutput("  " + node_id + " -> " + body_child_id + ";\n");
+
+  return node_id;
+}
+
 NodeId DotVisitor::GenerateNodeId() {
   return "node_" + std::to_string(counter_.GetValueAndIncrease());
 }

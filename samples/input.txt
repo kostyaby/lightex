@@ -2,6 +2,12 @@
 % This is a comment
 {\text\\ \emph{We need to go deeper! Or so Leo says.}} % this is a comment as well
 
+\begin{a}{x=3}
+  \begin{b}{1}{2}{3}
+    $a = \frac{b + c}{d}$
+  \end{b}
+\end{a}
+
 $\frac{a}{b}$
 
 $$
