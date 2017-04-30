@@ -47,6 +47,28 @@ NodeId DotVisitor::operator()(const ast::Command& command) {
   return node_id;
 }
 
+NodeId DotVisitor::operator()(const ast::CommandDefinition& command_definition) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"COMMAND_DEF = <name=" + command_definition.name);
+  AppendToOutput(" argument=");
+  AppendToOutput(std::to_string(command_definition.arguments_num.value_or(0)));
+  AppendToOutput(">\"];\n");
+
+  NodeId child_id = (*this)(command_definition.program);
+  AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::ArgumentReference& argument_reference) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"ARGUMENT_REF = <argument_id=");
+  AppendToOutput(std::to_string(argument_reference.argument_id));
+  AppendToOutput(">\"];\n");
+
+  return node_id;
+}
+
 NodeId DotVisitor::operator()(const ast::PlainText& plain_text) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text.text) + ">\"];\n");

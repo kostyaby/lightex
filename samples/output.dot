@@ -68,4 +68,32 @@ digraph d {
 a = b \\leftrightarrow b = a
 >"];
   node_0 -> node_33;
+  node_34 [label="COMMAND_DEF = <name=item argument=1>"];
+  node_35 [label="PROGRAM"];
+  node_36 [label="COMMAND = <name=tag>"];
+  node_37 [label="PROGRAM"];
+  node_38 [label="PLAIN_TEXT = <li>"];
+  node_37 -> node_38;
+  node_36 -> node_37;
+  node_35 -> node_36;
+  node_39 [label="ARGUMENT_REF = <argument_id=1>"];
+  node_35 -> node_39;
+  node_40 [label="COMMAND = <name=tag>"];
+  node_41 [label="PROGRAM"];
+  node_42 [label="PLAIN_TEXT = </li>"];
+  node_41 -> node_42;
+  node_40 -> node_41;
+  node_35 -> node_40;
+  node_34 -> node_35;
+  node_0 -> node_34;
+  node_43 [label="COMMAND_DEF = <name=newline argument=0>"];
+  node_44 [label="PROGRAM"];
+  node_45 [label="COMMAND = <name=tag>"];
+  node_46 [label="PROGRAM"];
+  node_47 [label="PLAIN_TEXT = <br>"];
+  node_46 -> node_47;
+  node_45 -> node_46;
+  node_44 -> node_45;
+  node_43 -> node_44;
+  node_0 -> node_43;
 }

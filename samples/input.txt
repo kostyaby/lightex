@@ -13,3 +13,6 @@ $\frac{a}{b}$
 $$
 a = b \leftrightarrow b = a
 $$
+
+\newcommand{\item}[1]{\tag{li}#1\tag{/li}}
+\newcommand{\newline}{\tag{br}}
