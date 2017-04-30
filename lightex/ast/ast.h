@@ -12,7 +12,6 @@ namespace ast {
 
 namespace x3 = boost::spirit::x3;
 
-struct PlainText;
 struct Program;
 struct ProgramNode;
 struct CommandDefinition;
@@ -20,15 +19,16 @@ struct ArgumentReference;
 struct EnvironmentDefinition;
 struct MathText;
 struct Command;
-// struct TabularEnvironment;
+struct TabularEnvironment;
 struct Environment;
 
-struct ProgramNode : x3::variant<x3::forward_ast<PlainText>,
+struct ProgramNode : x3::variant<std::string,
                                  x3::forward_ast<ArgumentReference>,
                                  x3::forward_ast<MathText>,
                                  x3::forward_ast<CommandDefinition>,
                                  x3::forward_ast<EnvironmentDefinition>,
                                  x3::forward_ast<Command>,
+                                 x3::forward_ast<TabularEnvironment>,
                                  x3::forward_ast<Environment>> {
   using base_type::base_type;
   using base_type::operator=;
@@ -36,10 +36,6 @@ struct ProgramNode : x3::variant<x3::forward_ast<PlainText>,
 
 struct Program : x3::position_tagged {
   std::list<ProgramNode> nodes;
-};
-
-struct PlainText : x3::position_tagged {
-  std::string text;
 };
 
 struct CommandDefinition : x3::position_tagged {
@@ -68,10 +64,10 @@ struct Command : x3::position_tagged {
   std::list<Program> arguments;
 };
 
-// struct TabularEnvironment : x3::position_tagged {
-//   string_t column_configuration;
-//   vector_t<string_t> content;
-// };
+struct TabularEnvironment : x3::position_tagged {
+  std::string column_configuration;
+  std::list<std::string> content;
+};
 
 struct Environment : x3::position_tagged {
   std::string begin_name;

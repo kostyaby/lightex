@@ -85,9 +85,9 @@ NodeId DotVisitor::operator()(const ast::ArgumentReference& argument_reference) 
   return node_id;
 }
 
-NodeId DotVisitor::operator()(const ast::PlainText& plain_text) {
+NodeId DotVisitor::operator()(const std::string& plain_text) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text.text) + ">\"];\n");
+  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text) + ">\"];\n");
 
   return node_id;
 }
@@ -95,6 +95,19 @@ NodeId DotVisitor::operator()(const ast::PlainText& plain_text) {
 NodeId DotVisitor::operator()(const ast::MathText& math_text) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"MATH_TEXT = <" + EscapeForDot(math_text.text) + ">\"];\n");
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::TabularEnvironment& tabular_environment) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"TABULAR_ENVIRONMENT = <column_configuration=" +
+                 tabular_environment.column_configuration + ">\"];\n");
+
+  for (const auto& content : tabular_environment.content) {
+    NodeId child_id = (*this)(content);
+    AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
+  }
 
   return node_id;
 }

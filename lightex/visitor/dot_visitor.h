@@ -27,9 +27,11 @@ class DotVisitor : public boost::static_visitor<NodeId> {
 
   NodeId operator()(const ast::ArgumentReference& argument_reference);
 
-  NodeId operator()(const ast::PlainText& plain_text);
+  NodeId operator()(const std::string& plain_text);
 
   NodeId operator()(const ast::MathText& math_text);
+
+  NodeId operator()(const ast::TabularEnvironment& tabular_environment);
 
   NodeId operator()(const ast::Environment& environment);
 
