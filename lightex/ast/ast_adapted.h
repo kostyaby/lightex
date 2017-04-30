@@ -19,13 +19,11 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::CommandDefinition,
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::ArgumentReference, (int, argument_id))
 
-// BOOST_FUSION_ADAPT_STRUCT(
-//     EnvironmentDefinition,
-//     (std::string, name),
-//     (int_t, arguments_num),
-//     (Program, pre_program),
-//     (Program, post_program)
-// )
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::EnvironmentDefinition,
+                          (std::string, name),
+                          (boost::optional<int>, arguments_num),
+                          (lightex::ast::Program, pre_program),
+                          (lightex::ast::Program, post_program))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::MathText, (std::string, text))
 

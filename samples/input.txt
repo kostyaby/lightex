@@ -14,5 +14,12 @@ $$
 a = b \leftrightarrow b = a
 $$
 
+\newenvironment{itemize}
+{\tag{ul}}
+{\tag{/ul}}
+
+\newenvironment{abc}[4]{
+  \newcommand{\def}[2]{$a ^ 2 + b ^ 2 = c ^ 2$}
+}{x}
 \newcommand{\item}[1]{\tag{li}#1\tag{/li}}
 \newcommand{\newline}{\tag{br}}

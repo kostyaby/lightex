@@ -60,6 +60,22 @@ NodeId DotVisitor::operator()(const ast::CommandDefinition& command_definition) 
   return node_id;
 }
 
+NodeId DotVisitor::operator()(const ast::EnvironmentDefinition& environment_definition) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT_DEF = <name=" + environment_definition.name);
+  AppendToOutput(" argument=");
+  AppendToOutput(std::to_string(environment_definition.arguments_num.value_or(0)));
+  AppendToOutput(">\"];\n");
+
+  NodeId pre_child_id = (*this)(environment_definition.pre_program);
+  AppendToOutput("  " + node_id + " -> " + pre_child_id + " [color=red];\n");
+
+  NodeId post_child_id = (*this)(environment_definition.post_program);
+  AppendToOutput("  " + node_id + " -> " + post_child_id + " [color=blue];\n");
+
+  return node_id;
+}
+
 NodeId DotVisitor::operator()(const ast::ArgumentReference& argument_reference) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"ARGUMENT_REF = <argument_id=");
