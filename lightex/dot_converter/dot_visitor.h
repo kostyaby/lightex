@@ -3,7 +3,6 @@
 #include <string>
 
 #include <lightex/ast/ast.h>
-#include <lightex/utils/counter.h>
 
 #include <boost/variant/static_visitor.hpp>
 
@@ -43,7 +42,7 @@ class DotVisitor : public boost::static_visitor<NodeId> {
   NodeId GenerateNodeId();
   void AppendToOutput(const std::string& s);
 
-  utils::Counter counter_;
+  int next_node_id_;
   std::string* output_;  // Not owned;
 };
 

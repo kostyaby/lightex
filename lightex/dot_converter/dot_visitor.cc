@@ -1,4 +1,4 @@
-#include <lightex/visitor/dot_visitor.h>
+#include <lightex/dot_converter/dot_visitor.h>
 
 namespace lightex {
 namespace visitor {
@@ -21,7 +21,7 @@ std::string EscapeForDot(const std::string& s) {
 }
 }  // namespace
 
-DotVisitor::DotVisitor(std::string* output) : output_(output) {}
+DotVisitor::DotVisitor(std::string* output) : output_(output), next_node_id_(0) {}
 
 NodeId DotVisitor::operator()(const ast::Program& program) {
   NodeId node_id = GenerateNodeId();
@@ -165,7 +165,7 @@ NodeId DotVisitor::operator()(const ast::Environment& environment) {
 }
 
 NodeId DotVisitor::GenerateNodeId() {
-  return "node_" + std::to_string(counter_.GetValueAndIncrease());
+  return "node_" + std::to_string(next_node_id_++);
 }
 
 void DotVisitor::AppendToOutput(const std::string& s) {

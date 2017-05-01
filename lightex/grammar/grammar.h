@@ -30,7 +30,7 @@ const auto control_word = x3::lexeme[x3::lit('\\') >> +x3::alpha] - x3::lit("\\b
                           x3::lit("\\newcommand") - x3::lit("\\newenvironment");
 const auto math_text_symbol = (x3::char_ - x3::char_('$'));
 const auto environment_identifier = x3::lexeme[+x3::alpha] - "tabular";
-const auto plain_text = x3::lexeme[+(control_symbol | (x3::char_ - special_symbol - x3::space))];
+const auto plain_text = x3::no_skip[+(control_symbol | (x3::char_ - special_symbol))];
 
 const auto program_def = *program_node;
 

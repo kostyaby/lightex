@@ -1,9 +1,9 @@
 #include <lightex/lightex.h>
 
 #include <lightex/ast/ast.h>
+#include <lightex/dot_converter/dot_visitor.h>
 #include <lightex/grammar/grammar.h>
 #include <lightex/utils/comment_remover.h>
-#include <lightex/visitor/dot_visitor.h>
 
 #include <boost/spirit/home/x3.hpp>
 #include <boost/variant/static_visitor.hpp>
