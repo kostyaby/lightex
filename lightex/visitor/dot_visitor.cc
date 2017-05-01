@@ -39,6 +39,11 @@ NodeId DotVisitor::operator()(const ast::Command& command) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"COMMAND = <name=" + command.name + ">\"];\n");
 
+  for (const auto& argument : command.default_arguments) {
+    NodeId child_id = (*this)(argument);
+    AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
+  }
+
   for (const auto& argument : command.arguments) {
     NodeId child_id = (*this)(argument);
     AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
@@ -47,39 +52,58 @@ NodeId DotVisitor::operator()(const ast::Command& command) {
   return node_id;
 }
 
-NodeId DotVisitor::operator()(const ast::CommandDefinition& command_definition) {
+NodeId DotVisitor::operator()(const ast::CommandMacro& command_macro) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"COMMAND_DEF = <name=" + command_definition.name);
+  AppendToOutput("  " + node_id + " [label=\"COMMAND_macro = <name=" + command_macro.name);
   AppendToOutput(" argument=");
-  AppendToOutput(std::to_string(command_definition.arguments_num.value_or(0)));
+  AppendToOutput(std::to_string(command_macro.arguments_num.value_or(0)));
   AppendToOutput(">\"];\n");
 
-  NodeId child_id = (*this)(command_definition.program);
+  for (const auto& argument : command_macro.default_arguments) {
+    NodeId child_id = (*this)(argument);
+    AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
+  }
+
+  NodeId child_id = (*this)(command_macro.program);
   AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
 
   return node_id;
 }
 
-NodeId DotVisitor::operator()(const ast::EnvironmentDefinition& environment_definition) {
+NodeId DotVisitor::operator()(const ast::EnvironmentMacro& environment_macro) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT_DEF = <name=" + environment_definition.name);
+  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT_macro = <name=" + environment_macro.name);
   AppendToOutput(" argument=");
-  AppendToOutput(std::to_string(environment_definition.arguments_num.value_or(0)));
+  AppendToOutput(std::to_string(environment_macro.arguments_num.value_or(0)));
   AppendToOutput(">\"];\n");
 
-  NodeId pre_child_id = (*this)(environment_definition.pre_program);
+  for (const auto& argument : environment_macro.default_arguments) {
+    NodeId child_id = (*this)(argument);
+    AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
+  }
+
+  NodeId pre_child_id = (*this)(environment_macro.pre_program);
   AppendToOutput("  " + node_id + " -> " + pre_child_id + " [color=red];\n");
 
-  NodeId post_child_id = (*this)(environment_definition.post_program);
+  NodeId post_child_id = (*this)(environment_macro.post_program);
   AppendToOutput("  " + node_id + " -> " + post_child_id + " [color=blue];\n");
 
   return node_id;
 }
 
-NodeId DotVisitor::operator()(const ast::ArgumentReference& argument_reference) {
+NodeId DotVisitor::operator()(const ast::OuterArgumentRef& outer_argument_ref) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"OUTER_ARGUMENT_REF = <argument_id=");
+  AppendToOutput(std::to_string(outer_argument_ref.argument_id));
+  AppendToOutput(">\"];\n");
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::ArgumentRef& argument_ref) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"ARGUMENT_REF = <argument_id=");
-  AppendToOutput(std::to_string(argument_reference.argument_id));
+  AppendToOutput(std::to_string(argument_ref.argument_id));
   AppendToOutput(">\"];\n");
 
   return node_id;
@@ -88,6 +112,13 @@ NodeId DotVisitor::operator()(const ast::ArgumentReference& argument_reference) 
 NodeId DotVisitor::operator()(const std::string& plain_text) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text) + ">\"];\n");
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::InlinedMathText& math_text) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"INLINED_MATH_TEXT = <" + EscapeForDot(math_text.text) + ">\"];\n");
 
   return node_id;
 }
@@ -116,6 +147,11 @@ NodeId DotVisitor::operator()(const ast::Environment& environment) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <begin_name=" + environment.begin_name);
   AppendToOutput(" end_name=" + environment.end_name + ">\"];\n");
+
+  for (const auto& argument : environment.default_arguments) {
+    NodeId child_id = (*this)(argument);
+    AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
+  }
 
   for (const auto& argument : environment.arguments) {
     NodeId child_id = (*this)(argument);

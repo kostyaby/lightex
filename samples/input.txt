@@ -18,12 +18,14 @@ $$
 {\tag{ul}}
 {\tag{/ul}}
 
-\newenvironment{abc}[4]{
-  \newcommand{\def}[2]{$a ^ 2 + b ^ 2 = c ^ 2$}
-}{x}
+\newenvironment{abc}[4] [1][2][3][4]{
+  \newcommand{\def}[2]{$a ^ 2 + b ^ 2 = c ^ 2$ ##1 #2 ##3}
+}{}
 \newcommand{\item}[1]{\tag{li}#1\tag{/li}}
 \newcommand{\newline}{\tag{br}}
 
+\begin{abc}[5][6][7][8]
+\end{abc}
 
 \begin{center}
   \begin{tabular}{ | l | c | r }

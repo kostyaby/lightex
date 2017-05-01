@@ -4,8 +4,11 @@
 #include <string>
 
 #include <boost/optional/optional.hpp>
+#include <boost/optional/optional_io.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
+
+// #define BOOST_SPIRIT_X3_DEBUG
 
 namespace lightex {
 namespace ast {
@@ -14,19 +17,23 @@ namespace x3 = boost::spirit::x3;
 
 struct Program;
 struct ProgramNode;
-struct CommandDefinition;
-struct ArgumentReference;
-struct EnvironmentDefinition;
+struct CommandMacro;
+struct ArgumentRef;
+struct OuterArgumentRef;
+struct EnvironmentMacro;
+struct InlinedMathText;
 struct MathText;
 struct Command;
 struct TabularEnvironment;
 struct Environment;
 
 struct ProgramNode : x3::variant<std::string,
-                                 x3::forward_ast<ArgumentReference>,
+                                 x3::forward_ast<ArgumentRef>,
+                                 x3::forward_ast<OuterArgumentRef>,
+                                 x3::forward_ast<InlinedMathText>,
                                  x3::forward_ast<MathText>,
-                                 x3::forward_ast<CommandDefinition>,
-                                 x3::forward_ast<EnvironmentDefinition>,
+                                 x3::forward_ast<CommandMacro>,
+                                 x3::forward_ast<EnvironmentMacro>,
                                  x3::forward_ast<Command>,
                                  x3::forward_ast<TabularEnvironment>,
                                  x3::forward_ast<Environment>> {
@@ -38,21 +45,31 @@ struct Program : x3::position_tagged {
   std::list<ProgramNode> nodes;
 };
 
-struct CommandDefinition : x3::position_tagged {
-  std::string name;
-  boost::optional<int> arguments_num;
-  Program program;
-};
-
-struct ArgumentReference : x3::position_tagged {
+struct ArgumentRef : x3::position_tagged {
   int argument_id;
 };
 
-struct EnvironmentDefinition : x3::position_tagged {
+struct OuterArgumentRef : x3::position_tagged {
+  int argument_id;
+};
+
+struct CommandMacro : x3::position_tagged {
   std::string name;
   boost::optional<int> arguments_num;
+  std::list<Program> default_arguments;
+  Program program;
+};
+
+struct EnvironmentMacro : x3::position_tagged {
+  std::string name;
+  boost::optional<int> arguments_num;
+  std::list<Program> default_arguments;
   Program pre_program;
   Program post_program;
+};
+
+struct InlinedMathText : x3::position_tagged {
+  std::string text;
 };
 
 struct MathText : x3::position_tagged {
@@ -61,6 +78,7 @@ struct MathText : x3::position_tagged {
 
 struct Command : x3::position_tagged {
   std::string name;
+  std::list<Program> default_arguments;
   std::list<Program> arguments;
 };
 
@@ -71,6 +89,7 @@ struct TabularEnvironment : x3::position_tagged {
 
 struct Environment : x3::position_tagged {
   std::string begin_name;
+  std::list<Program> default_arguments;
   std::list<Program> arguments;
   Program body;
   std::string end_name;
