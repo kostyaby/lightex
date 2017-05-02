@@ -18,7 +18,7 @@ digraph d {
   node_4 -> node_7;
   node_1 -> node_4;
   node_0 -> node_1;
-  node_10 [label="PLAIN_TEXT = <
+  node_10 [label="PLAIN_TEXT = < 
 
 >"];
   node_0 -> node_10;

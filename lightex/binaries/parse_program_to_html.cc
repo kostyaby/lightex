@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 
   std::string error_message;
   std::string result;
-  if (!lightex::ParseProgramToDot(storage, &error_message, &result)) {
+  if (!lightex::ParseProgramToHtml(storage, &error_message, &result)) {
     std::cerr << "Error: failed to parse input!" << std::endl;
     std::cerr << error_message << std::endl;
     return 1;

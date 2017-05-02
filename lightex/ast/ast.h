@@ -16,13 +16,12 @@ namespace ast {
 namespace x3 = boost::spirit::x3;
 
 struct Program;
-struct ProgramNode;
-struct CommandMacro;
 struct ArgumentRef;
 struct OuterArgumentRef;
-struct EnvironmentMacro;
 struct InlinedMathText;
 struct MathText;
+struct CommandMacro;
+struct EnvironmentMacro;
 struct Command;
 struct TabularEnvironment;
 struct Environment;
@@ -53,6 +52,14 @@ struct OuterArgumentRef : x3::position_tagged {
   int argument_id;
 };
 
+struct InlinedMathText : x3::position_tagged {
+  std::string text;
+};
+
+struct MathText : x3::position_tagged {
+  std::string text;
+};
+
 struct CommandMacro : x3::position_tagged {
   std::string name;
   boost::optional<int> arguments_num;
@@ -66,14 +73,6 @@ struct EnvironmentMacro : x3::position_tagged {
   std::list<Program> default_arguments;
   Program pre_program;
   Program post_program;
-};
-
-struct InlinedMathText : x3::position_tagged {
-  std::string text;
-};
-
-struct MathText : x3::position_tagged {
-  std::string text;
 };
 
 struct Command : x3::position_tagged {

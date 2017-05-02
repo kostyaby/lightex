@@ -1,7 +1,7 @@
 #include <lightex/dot_converter/dot_visitor.h>
 
 namespace lightex {
-namespace visitor {
+namespace dot_converter {
 namespace {
 
 std::string EscapeForDot(const std::string& s) {
@@ -35,19 +35,41 @@ NodeId DotVisitor::operator()(const ast::Program& program) {
   return node_id;
 }
 
-NodeId DotVisitor::operator()(const ast::Command& command) {
+NodeId DotVisitor::operator()(const std::string& plain_text) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"COMMAND = <name=" + command.name + ">\"];\n");
+  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text) + ">\"];\n");
 
-  for (const auto& argument : command.default_arguments) {
-    NodeId child_id = (*this)(argument);
-    AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
-  }
+  return node_id;
+}
 
-  for (const auto& argument : command.arguments) {
-    NodeId child_id = (*this)(argument);
-    AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
-  }
+NodeId DotVisitor::operator()(const ast::ArgumentRef& argument_ref) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"ARGUMENT_REF = <argument_id=");
+  AppendToOutput(std::to_string(argument_ref.argument_id));
+  AppendToOutput(">\"];\n");
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::OuterArgumentRef& outer_argument_ref) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"OUTER_ARGUMENT_REF = <argument_id=");
+  AppendToOutput(std::to_string(outer_argument_ref.argument_id));
+  AppendToOutput(">\"];\n");
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::InlinedMathText& math_text) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"INLINED_MATH_TEXT = <" + EscapeForDot(math_text.text) + ">\"];\n");
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::MathText& math_text) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"MATH_TEXT = <" + EscapeForDot(math_text.text) + ">\"];\n");
 
   return node_id;
 }
@@ -91,41 +113,19 @@ NodeId DotVisitor::operator()(const ast::EnvironmentMacro& environment_macro) {
   return node_id;
 }
 
-NodeId DotVisitor::operator()(const ast::OuterArgumentRef& outer_argument_ref) {
+NodeId DotVisitor::operator()(const ast::Command& command) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"OUTER_ARGUMENT_REF = <argument_id=");
-  AppendToOutput(std::to_string(outer_argument_ref.argument_id));
-  AppendToOutput(">\"];\n");
+  AppendToOutput("  " + node_id + " [label=\"COMMAND = <name=" + command.name + ">\"];\n");
 
-  return node_id;
-}
+  for (const auto& argument : command.default_arguments) {
+    NodeId child_id = (*this)(argument);
+    AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
+  }
 
-NodeId DotVisitor::operator()(const ast::ArgumentRef& argument_ref) {
-  NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"ARGUMENT_REF = <argument_id=");
-  AppendToOutput(std::to_string(argument_ref.argument_id));
-  AppendToOutput(">\"];\n");
-
-  return node_id;
-}
-
-NodeId DotVisitor::operator()(const std::string& plain_text) {
-  NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text) + ">\"];\n");
-
-  return node_id;
-}
-
-NodeId DotVisitor::operator()(const ast::InlinedMathText& math_text) {
-  NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"INLINED_MATH_TEXT = <" + EscapeForDot(math_text.text) + ">\"];\n");
-
-  return node_id;
-}
-
-NodeId DotVisitor::operator()(const ast::MathText& math_text) {
-  NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"MATH_TEXT = <" + EscapeForDot(math_text.text) + ">\"];\n");
+  for (const auto& argument : command.arguments) {
+    NodeId child_id = (*this)(argument);
+    AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
+  }
 
   return node_id;
 }
@@ -176,5 +176,5 @@ void DotVisitor::AppendToOutput(const std::string& s) {
   *output_ += s;
 }
 
-}  // namespace visitor
+}  // namespace dot_converter
 }  // namespace lightex

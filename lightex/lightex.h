@@ -5,6 +5,8 @@
 
 namespace lightex {
 
-bool ParseProgramToDot(const std::string& input, std::string* failed_snippet, std::string* output);
+bool ParseProgramToDot(const std::string& input, std::string* error_message, std::string* output);
+
+bool ParseProgramToHtml(const std::string& input, std::string* error_message, std::string* output);
 
 }  // namespace lightex

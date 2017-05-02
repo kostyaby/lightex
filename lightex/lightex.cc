@@ -2,6 +2,7 @@
 
 #include <lightex/ast/ast.h>
 #include <lightex/dot_converter/dot_visitor.h>
+#include <lightex/html_converter/html_visitor.h>
 #include <lightex/grammar/grammar.h>
 #include <lightex/utils/comment_remover.h>
 
@@ -10,33 +11,71 @@
 
 namespace lightex {
 namespace {
-const int kFailedSnippetLength = 30;
-}  // namespace
 
-bool ParseProgramToDot(const std::string& input, std::string* failed_snippet, std::string* output) {
-  namespace x3 = boost::spirit::x3;
+const char kSyntaxParsingError[] = "Error while running syntax analysis! Failed on the following snippet: ";
+const int kFailedSnippetLength = 20;
+
+namespace x3 = boost::spirit::x3;
+
+bool ParseProgramToAst(const std::string& input, std::string* error_message, ast::Program* output) {
+  if (!output) {
+    return false;
+  }
 
   std::string preprocessed_input = utils::RemoveCommentsFromProgram(input);
 
-  ast::Program ast;
   std::string::const_iterator start = preprocessed_input.begin();
   std::string::const_iterator iter = start;
   std::string::const_iterator end = preprocessed_input.end();
-  bool r = x3::phrase_parse(iter, end, grammar::program, x3::space, ast);
-  if (!r || iter < end) {
-    if (failed_snippet) {
+  if (!x3::phrase_parse(iter, end, grammar::program, x3::space, *output) || iter < end) {
+    if (error_message) {
       std::size_t failed_at = iter - start;
-      *failed_snippet = preprocessed_input.substr(failed_at, failed_at + kFailedSnippetLength);
+      *error_message = kSyntaxParsingError;
+      *error_message = preprocessed_input.substr(failed_at, failed_at + kFailedSnippetLength);
+      if (failed_at + kFailedSnippetLength + 1 < preprocessed_input.size()) {
+        *error_message += "...";
+      }
     }
     return false;
   }
 
-  if (output) {
-    *output += "digraph d {\n";
-    visitor::DotVisitor visitor(output);
-    visitor(ast);
-    *output += "}\n";
+  return true;
+}
+}  // namespace
+
+bool ParseProgramToDot(const std::string& input, std::string* error_message, std::string* output) {
+  if (!output) {
+    return false;
   }
+
+  ast::Program ast;
+  if (!ParseProgramToAst(input, error_message, &ast)) {
+    return false;
+  }
+
+  *output += "digraph d {\n";
+  dot_converter::DotVisitor visitor(output);
+  visitor(ast);
+  *output += "}\n";
+
+  return true;
+}
+
+bool ParseProgramToHtml(const std::string& input, std::string* error_message, std::string* output) {
+  if (!output) {
+    return false;
+  }
+
+  ast::Program ast;
+  if (!ParseProgramToAst(input, error_message, &ast)) {
+    return false;
+  }
+
+  html_converter::HtmlVisitor visitor(output, error_message);
+  if (!visitor(ast)) {
+    return false;
+  }
+
   return true;
 }
 

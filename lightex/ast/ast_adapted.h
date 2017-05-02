@@ -14,6 +14,10 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::ArgumentRef, (int, argument_id))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::OuterArgumentRef, (int, argument_id))
 
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::InlinedMathText, (std::string, text))
+
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::MathText, (std::string, text))
+
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::CommandMacro,
                           (std::string, name),
                           (boost::optional<int>, arguments_num),
@@ -26,10 +30,6 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::EnvironmentMacro,
                           (std::list<lightex::ast::Program>, default_arguments),
                           (lightex::ast::Program, pre_program),
                           (lightex::ast::Program, post_program))
-
-BOOST_FUSION_ADAPT_STRUCT(lightex::ast::InlinedMathText, (std::string, text))
-
-BOOST_FUSION_ADAPT_STRUCT(lightex::ast::MathText, (std::string, text))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Command,
                           (std::string, name),
