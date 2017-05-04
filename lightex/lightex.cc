@@ -2,7 +2,7 @@
 
 #include <lightex/ast/ast.h>
 #include <lightex/dot_converter/dot_visitor.h>
-#include <lightex/html_converter/html_visitor.h>
+// #include <lightex/html_converter/html_visitor.h>
 #include <lightex/grammar/grammar.h>
 #include <lightex/utils/comment_remover.h>
 
@@ -71,11 +71,16 @@ bool ParseProgramToHtml(const std::string& input, std::string* error_message, st
     return false;
   }
 
-  html_converter::HtmlVisitor visitor(output, error_message);
-  if (!visitor(ast)) {
-    return false;
-  }
+  // html_converter::HtmlVisitor visitor;
+  // html_converter::Result result = visitor(ast);
+  // if (!result.is_successful) {
+  //   if (error_message) {
+  //     *error_message = result.value;
+  //   }
+  //   return false;
+  // }
 
+  // *output = result.value;
   return true;
 }
 

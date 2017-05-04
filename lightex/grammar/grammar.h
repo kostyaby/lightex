@@ -12,72 +12,82 @@ namespace grammar {
 
 namespace x3 = boost::spirit::x3;
 
-x3::rule<class ProgramId, ast::Program> program = "program";
 x3::rule<class ProgramNodeId, ast::ProgramNode> program_node = "program_node";
-x3::rule<class CommandMacroId, ast::CommandMacro> command_macro = "command_macro";
-x3::rule<class EnvironmentMacroId, ast::EnvironmentMacro> environment_macro = "environment_macro";
+x3::rule<class ParagraphNodeId, ast::ParagraphNode> paragraph_node = "paragraph_node";
+x3::rule<class ArgumentNodeId, ast::ArgumentNode> argument_node = "argument_node";
+
+x3::rule<class ProgramId, ast::Program> program = "program";
+x3::rule<class ParagraphId, ast::Paragraph> paragraph = "paragraph";
+x3::rule<class ParagraphBreakerId, ast::ParagraphBreaker> paragraph_breaker = "paragraph_breaker";
+x3::rule<class ArgumentId, ast::Argument> argument = "argument";
 x3::rule<class ArgumentRefId, ast::ArgumentRef> argument_ref = "argument_ref";
 x3::rule<class OuterArgumentRefId, ast::OuterArgumentRef> outer_argument_ref = "outer_argument_ref";
-x3::rule<class CommandId, ast::Command> command = "command";
 x3::rule<class InlinedMathTextId, ast::InlinedMathText> inlined_math_text = "inlined_math_text";
 x3::rule<class MathTextId, ast::MathText> math_text = "math_text";
-x3::rule<class TabularEnvironmentId, ast::TabularEnvironment> tabular_environment = "tabular_environment";
+x3::rule<class CommandMacroId, ast::CommandMacro> command_macro = "command_macro";
+x3::rule<class EnvironmentMacroId, ast::EnvironmentMacro> environment_macro = "environment_macro";
+x3::rule<class CommandId, ast::Command> command = "command";
 x3::rule<class EnvironmentId, ast::Environment> environment = "environment";
 
 const auto special_symbol = x3::char_("\\{}$&#^_%~[]");
-const auto control_symbol = x3::lexeme[x3::lit('\\') >> special_symbol];
-const auto control_word = x3::lexeme[x3::lit('\\') >> +x3::alpha] - x3::lit("\\begin") - x3::lit("\\end") -
-                          x3::lit("\\newcommand") - x3::lit("\\newenvironment");
+const auto control_symbol = x3::lexeme['\\' >> special_symbol];
+const auto special_command_identifier = x3::lit("begin") | "end" | "newcommand" | "newenvironment";
+const auto command_identifier = x3::lexeme['\\' >> (+x3::alpha - special_command_identifier)];
 const auto math_text_symbol = (x3::char_ - x3::char_('$'));
-const auto environment_identifier = x3::lexeme[+x3::alpha] - "tabular";
-const auto plain_text = x3::no_skip[+(control_symbol | (x3::char_ - special_symbol))];
+const auto environment_identifier = x3::lexeme[+x3::alpha];
+const auto plain_text = x3::lexeme[+(control_symbol | (x3::char_ - special_symbol - x3::space))];
+
+const auto program_node_def =
+    paragraph_breaker | paragraph | math_text | environment | command_macro | environment_macro;
+
+const auto paragraph_node_def = &(!x3::omit[paragraph_breaker]) >> (plain_text | inlined_math_text | command);
+
+const auto argument_node_def = plain_text | inlined_math_text | command | argument_ref | outer_argument_ref;
 
 const auto program_def = *program_node;
 
-const auto program_node_def = plain_text | argument_ref | outer_argument_ref | inlined_math_text | math_text |
-                              command_macro | environment_macro | command | tabular_environment | environment;
+const auto paragraph_def = +paragraph_node;
 
-const auto command_macro_def =
-    x3::lit("\\newcommand{") >> control_word >> x3::lit('}') >>
-    -(x3::lit('[') >> x3::int_ >> x3::lit(']') >> *(x3::lit('[') >> program >> x3::lit(']'))) >> x3::lit('{') >> program
-    >> x3::lit('}');
+const auto paragraph_breaker_def = x3::omit[x3::skip(x3::lit(' '))[x3::repeat(2, x3::inf)[x3::lit('\n')]]];
 
-const auto environment_macro_def =
-    x3::lit("\\newenvironment{") >> environment_identifier >> x3::lit('}') >>
-    -(x3::lit('[') >> x3::int_ >> x3::lit(']') >> *(x3::lit('[') >> program >> x3::lit(']'))) >> x3::lit('{') >> program
-    >> x3::lit('}') >> x3::lit('{') >> program >> x3::lit('}');
+const auto argument_def = *argument_node;
 
 const auto argument_ref_def = x3::lexeme[x3::lit('#') >> x3::int_];
 
 const auto outer_argument_ref_def = x3::lexeme[x3::lit("##") >> x3::int_];
 
-const auto command_def = control_word >> *(x3::lit('[') >> program >> x3::lit(']')) >>
-                         *(x3::lit('{') >> program >> x3::lit('}'));
+const auto inlined_math_text_def = x3::lit('$') >> x3::no_skip[+math_text_symbol] >> '$';
 
-const auto inlined_math_text_def = x3::lit('$') >> x3::no_skip[+math_text_symbol] >> x3::lit('$');
+const auto math_text_def = x3::lit("$$") >> x3::no_skip[+math_text_symbol] >> "$$";
 
-const auto math_text_def = x3::lit("$$") >> x3::no_skip[+math_text_symbol] >> x3::lit("$$");
+const auto command_macro_def = x3::lit("\\newcommand{") >> command_identifier >> '}' >>
+                               -('[' >> x3::int_ >> ']' >> *('[' >> argument >> ']')) >> '{' >> argument >> '}';
 
-const auto tabular_environment_def =
-    x3::lit("\\begin{tabular}") >> x3::lit('{') >> *x3::char_("lrc|") >> x3::lit('}') >>
-    *(x3::string("\\hline") | x3::string("&") | x3::string("\\\\") | plain_text) >> x3::lit("\\end{tabular}");
+const auto environment_macro_def = x3::lit("\\newenvironment{") >> environment_identifier >> '}' >>
+                                   -('[' >> x3::int_ >> ']' >> *('[' >> argument >> ']')) >> '{' >> program >> '}' >>
+                                   '{' >> program >> '}';
 
-const auto environment_def = x3::lit("\\begin{") >> environment_identifier >> x3::lit('}') >>
-                             *(x3::lit('[') >> program >> x3::lit(']')) >>
-                             *(x3::lit('{') >> program >> x3::lit('}')) >> program
-                             >> x3::lit("\\end{") >> environment_identifier >> x3::lit('}');
+const auto command_def = command_identifier >> *('[' >> argument >> ']') >> *('{' >> argument >> '}');
+
+const auto environment_def = x3::lit("\\begin{") >> environment_identifier >> '}' >> *('[' >> argument >> ']') >>
+                             *('{' >> argument >> '}') >> program >> "\\end{" >> environment_identifier >> '}';
+
+BOOST_SPIRIT_DEFINE(program_node)
+BOOST_SPIRIT_DEFINE(paragraph_node)
+BOOST_SPIRIT_DEFINE(argument_node)
 
 BOOST_SPIRIT_DEFINE(program)
-BOOST_SPIRIT_DEFINE(program_node)
-BOOST_SPIRIT_DEFINE(command_macro)
-BOOST_SPIRIT_DEFINE(environment_macro)
+BOOST_SPIRIT_DEFINE(paragraph)
+BOOST_SPIRIT_DEFINE(paragraph_breaker)
+BOOST_SPIRIT_DEFINE(argument)
 BOOST_SPIRIT_DEFINE(argument_ref)
 BOOST_SPIRIT_DEFINE(outer_argument_ref)
-BOOST_SPIRIT_DEFINE(command)
 BOOST_SPIRIT_DEFINE(inlined_math_text)
 BOOST_SPIRIT_DEFINE(math_text)
+BOOST_SPIRIT_DEFINE(command_macro)
+BOOST_SPIRIT_DEFINE(environment_macro)
+BOOST_SPIRIT_DEFINE(command)
 BOOST_SPIRIT_DEFINE(environment)
-BOOST_SPIRIT_DEFINE(tabular_environment)
 
 }  // namespace grammar
 }  // namespace lightex

@@ -13,7 +13,7 @@ include_directories(${lightex_root})
 set(lightex_src_files ${lightex_src_files}
     ${lightex_root}/lightex/lightex.cc
     ${lightex_root}/lightex/dot_converter/dot_visitor.cc
-    ${lightex_root}/lightex/html_converter/html_visitor.cc
+#     ${lightex_root}/lightex/html_converter/html_visitor.cc
     ${lightex_root}/lightex/utils/comment_remover.cc)
 add_library(lightex STATIC ${lightex_src_files})
 
@@ -26,5 +26,5 @@ link_directories(${Boost_LIBRARY_DIR})
 add_executable(parse_program_to_dot ${lightex_root}/lightex/binaries/parse_program_to_dot.cc)
 target_link_libraries(parse_program_to_dot lightex)
 
-add_executable(parse_program_to_html ${lightex_root}/lightex/binaries/parse_program_to_html.cc)
-target_link_libraries(parse_program_to_html lightex)
+# add_executable(parse_program_to_html ${lightex_root}/lightex/binaries/parse_program_to_html.cc)
+# target_link_libraries(parse_program_to_html lightex)

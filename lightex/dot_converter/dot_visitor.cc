@@ -23,6 +23,13 @@ std::string EscapeForDot(const std::string& s) {
 
 DotVisitor::DotVisitor(std::string* output) : output_(output), next_node_id_(0) {}
 
+NodeId DotVisitor::operator()(const std::string& plain_text) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text) + ">\"];\n");
+
+  return node_id;
+}
+
 NodeId DotVisitor::operator()(const ast::Program& program) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"PROGRAM\"];\n");
@@ -35,9 +42,33 @@ NodeId DotVisitor::operator()(const ast::Program& program) {
   return node_id;
 }
 
-NodeId DotVisitor::operator()(const std::string& plain_text) {
+NodeId DotVisitor::operator()(const ast::Paragraph& paragraph) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text) + ">\"];\n");
+  AppendToOutput("  " + node_id + " [label=\"PARAGRAPH\"];\n");
+
+  for (const auto& paragraph_node : paragraph.nodes) {
+    NodeId child_id = boost::apply_visitor(*this, paragraph_node);
+    AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
+  }
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::ParagraphBreaker& paragraph_breaker) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"PARAGRAPH_BREAKER\"];\n");
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::Argument& argument) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"ARGUMENT\"];\n");
+
+  for (const auto& argument_node : argument.nodes) {
+    NodeId child_id = boost::apply_visitor(*this, argument_node);
+    AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
+  }
 
   return node_id;
 }
@@ -76,7 +107,7 @@ NodeId DotVisitor::operator()(const ast::MathText& math_text) {
 
 NodeId DotVisitor::operator()(const ast::CommandMacro& command_macro) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"COMMAND_macro = <name=" + command_macro.name);
+  AppendToOutput("  " + node_id + " [label=\"COMMAND_MACRO = <name=" + command_macro.name);
   AppendToOutput(" argument=");
   AppendToOutput(std::to_string(command_macro.arguments_num.value_or(0)));
   AppendToOutput(">\"];\n");
@@ -86,7 +117,7 @@ NodeId DotVisitor::operator()(const ast::CommandMacro& command_macro) {
     AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
   }
 
-  NodeId child_id = (*this)(command_macro.program);
+  NodeId child_id = (*this)(command_macro.body);
   AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
 
   return node_id;
@@ -94,7 +125,7 @@ NodeId DotVisitor::operator()(const ast::CommandMacro& command_macro) {
 
 NodeId DotVisitor::operator()(const ast::EnvironmentMacro& environment_macro) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT_macro = <name=" + environment_macro.name);
+  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT_MACRO = <name=" + environment_macro.name);
   AppendToOutput(" argument=");
   AppendToOutput(std::to_string(environment_macro.arguments_num.value_or(0)));
   AppendToOutput(">\"];\n");
@@ -130,19 +161,6 @@ NodeId DotVisitor::operator()(const ast::Command& command) {
   return node_id;
 }
 
-NodeId DotVisitor::operator()(const ast::TabularEnvironment& tabular_environment) {
-  NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"TABULAR_ENVIRONMENT = <column_configuration=" +
-                 tabular_environment.column_configuration + ">\"];\n");
-
-  for (const auto& content : tabular_environment.content) {
-    NodeId child_id = (*this)(content);
-    AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
-  }
-
-  return node_id;
-}
-
 NodeId DotVisitor::operator()(const ast::Environment& environment) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <begin_name=" + environment.begin_name);
@@ -158,7 +176,7 @@ NodeId DotVisitor::operator()(const ast::Environment& environment) {
     AppendToOutput("  " + node_id + " -> " + child_id + " [style=dotted];\n");
   }
 
-  NodeId body_child_id = (*this)(environment.body);
+  NodeId body_child_id = (*this)(environment.program);
   AppendToOutput("  " + node_id + " -> " + body_child_id + ";\n");
 
   return node_id;

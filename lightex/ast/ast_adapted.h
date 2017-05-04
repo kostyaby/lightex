@@ -10,6 +10,12 @@
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Program, (std::list<lightex::ast::ProgramNode>, nodes))
 
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Paragraph, (std::list<lightex::ast::ParagraphNode>, nodes))
+
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::ParagraphBreaker)
+
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Argument, (std::list<lightex::ast::ArgumentNode>, nodes))
+
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::ArgumentRef, (int, argument_id))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::OuterArgumentRef, (int, argument_id))
@@ -21,28 +27,24 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::MathText, (std::string, text))
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::CommandMacro,
                           (std::string, name),
                           (boost::optional<int>, arguments_num),
-                          (std::list<lightex::ast::Program>, default_arguments),
-                          (lightex::ast::Program, program))
+                          (std::list<lightex::ast::Argument>, default_arguments),
+                          (lightex::ast::Argument, body))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::EnvironmentMacro,
                           (std::string, name),
                           (boost::optional<int>, arguments_num),
-                          (std::list<lightex::ast::Program>, default_arguments),
+                          (std::list<lightex::ast::Argument>, default_arguments),
                           (lightex::ast::Program, pre_program),
                           (lightex::ast::Program, post_program))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Command,
                           (std::string, name),
-                          (std::list<lightex::ast::Program>, default_arguments),
-                          (std::list<lightex::ast::Program>, arguments))
-
-BOOST_FUSION_ADAPT_STRUCT(lightex::ast::TabularEnvironment,
-                          (std::string, column_configuration),
-                          (std::list<std::string>, content))
+                          (std::list<lightex::ast::Argument>, default_arguments),
+                          (std::list<lightex::ast::Argument>, arguments))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Environment,
                           (std::string, begin_name),
-                          (std::list<lightex::ast::Program>, default_arguments),
-                          (std::list<lightex::ast::Program>, arguments),
-                          (lightex::ast::Program, body),
+                          (std::list<lightex::ast::Argument>, default_arguments),
+                          (std::list<lightex::ast::Argument>, arguments),
+                          (lightex::ast::Program, program),
                           (std::string, end_name))
