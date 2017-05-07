@@ -7,8 +7,7 @@
 #include <boost/optional/optional_io.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
-
-#define BOOST_SPIRIT_X3_DEBUG
+#include <boost/spirit/home/x3/support/context.hpp>
 
 namespace lightex {
 namespace ast {
@@ -27,6 +26,7 @@ struct MathText;
 struct CommandMacro;
 struct EnvironmentMacro;
 struct Command;
+struct UnescapedCommand;
 struct Environment;
 
 struct ProgramNode : x3::variant<x3::forward_ast<ParagraphBreaker>,
@@ -39,8 +39,10 @@ struct ProgramNode : x3::variant<x3::forward_ast<ParagraphBreaker>,
   using base_type::operator=;
 };
 
-struct ParagraphNode
-    : x3::variant<x3::forward_ast<PlainText>, x3::forward_ast<InlinedMathText>, x3::forward_ast<Command>> {
+struct ParagraphNode : x3::variant<x3::forward_ast<PlainText>,
+                                   x3::forward_ast<InlinedMathText>,
+                                   x3::forward_ast<Command>,
+                                   x3::forward_ast<UnescapedCommand>> {
   using base_type::base_type;
   using base_type::operator=;
 };
@@ -48,6 +50,7 @@ struct ParagraphNode
 struct ArgumentNode : x3::variant<x3::forward_ast<PlainText>,
                                   x3::forward_ast<InlinedMathText>,
                                   x3::forward_ast<Command>,
+                                  x3::forward_ast<UnescapedCommand>,
                                   x3::forward_ast<ArgumentRef>,
                                   x3::forward_ast<OuterArgumentRef>> {
   using base_type::base_type;
@@ -107,6 +110,10 @@ struct Command : x3::position_tagged {
   std::string name;
   std::list<Argument> default_arguments;
   std::list<Argument> arguments;
+};
+
+struct UnescapedCommand : x3::position_tagged {
+  Argument body;
 };
 
 struct Environment : x3::position_tagged {

@@ -161,6 +161,16 @@ NodeId DotVisitor::operator()(const ast::Command& command) {
   return node_id;
 }
 
+NodeId DotVisitor::operator()(const ast::UnescapedCommand& unescaped_command) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"UNESCAPED_COMMAND\"];\n");
+
+  NodeId child_id = (*this)(unescaped_command.body);
+  AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
+
+  return node_id;
+}
+
 NodeId DotVisitor::operator()(const ast::Environment& environment) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <begin_name=" + environment.begin_name);

@@ -214,18 +214,9 @@ Result HtmlVisitor::operator()(const ast::Command& command) {
     }
   };
 
-  // A little dirty hack: in order not to escape symbols sometimes, we introduce an \Unescaped command macros and
-  // check if this is it while generating command arguments.
-  int active_unescaped_num_delta = 0;
-  if (command.name == kUnescapedCommandName) {
-    active_unescaped_num_delta = 1;
-  }
-
   std::vector<std::string> args(args_num);
   for (int i = 0; i < args_num; ++i) {
-    active_unescaped_num_ += active_unescaped_num_delta;
     Result child_result = (*this)(get_argument(i));
-    active_unescaped_num_ -= active_unescaped_num_delta;
     if (!child_result.is_successful) {
       return child_result;
     }
@@ -236,6 +227,14 @@ Result HtmlVisitor::operator()(const ast::Command& command) {
   PushArgumentVector(std::move(args));
   Result result = (*this)(command_macro_ptr->body);
   PopArgumentVector();
+
+  return result;
+}
+
+Result HtmlVisitor::operator()(const ast::UnescapedCommand& unescaped_command) {
+  active_unescaped_num_ += 1;
+  Result result = (*this)(unescaped_command.body);
+  active_unescaped_num_ -= 1;
 
   return result;
 }

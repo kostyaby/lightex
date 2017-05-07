@@ -53,9 +53,8 @@ kjqnwkenwqjke
 
 jkenwqkjenkqwjenjk
 
-\newcommand{\Unescaped}[1]{#1}
-\newcommand{\textbf}[1]{\Unescaped{<b>#1</b>}}
-\newcommand{\textit}[1]{\Unescaped{<i>#1</i>}}
+\newcommand{\textbf}[1]{\unescaped{<b>#1</b>}}
+\newcommand{\textit}[1]{\unescaped{<i>#1</i>}}
 
 klkjenqwkenwqjkewqjknejn asf asd asad
 $\frac{a}{b}$ jkenwqkjenkqwjenjk

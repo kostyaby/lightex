@@ -34,6 +34,7 @@ class HtmlVisitor : public boost::static_visitor<Result> {
   Result operator()(const ast::CommandMacro& command_macro);
   Result operator()(const ast::EnvironmentMacro& environment_macro);
   Result operator()(const ast::Command& command);
+  Result operator()(const ast::UnescapedCommand& unescaped_command);
   Result operator()(const ast::Environment& environment);
 
  private:
