@@ -17,6 +17,7 @@ x3::rule<class ParagraphNodeId, ast::ParagraphNode> paragraph_node = "paragraph_
 x3::rule<class ArgumentNodeId, ast::ArgumentNode> argument_node = "argument_node";
 
 x3::rule<class ProgramId, ast::Program> program = "program";
+x3::rule<class PlainTextId, ast::PlainText> plain_text = "plain_text";
 x3::rule<class ParagraphId, ast::Paragraph> paragraph = "paragraph";
 x3::rule<class ParagraphBreakerId, ast::ParagraphBreaker> paragraph_breaker = "paragraph_breaker";
 x3::rule<class ArgumentId, ast::Argument> argument = "argument";
@@ -35,10 +36,11 @@ const auto special_command_identifier = x3::lit("begin") | "end" | "newcommand" 
 const auto command_identifier = x3::lexeme['\\' >> (+x3::alpha - special_command_identifier)];
 const auto math_text_symbol = (x3::char_ - x3::char_('$'));
 const auto environment_identifier = x3::lexeme[+x3::alpha];
-const auto plain_text = x3::lexeme[+(control_symbol | (x3::char_ - special_symbol - x3::space))];
 
 const auto program_node_def =
     paragraph_breaker | paragraph | math_text | environment | command_macro | environment_macro;
+
+const auto plain_text_def = x3::lexeme[+(control_symbol | (x3::char_ - special_symbol - x3::space))];
 
 const auto paragraph_node_def = &(!x3::omit[paragraph_breaker]) >> (plain_text | inlined_math_text | command);
 
@@ -77,6 +79,7 @@ BOOST_SPIRIT_DEFINE(paragraph_node)
 BOOST_SPIRIT_DEFINE(argument_node)
 
 BOOST_SPIRIT_DEFINE(program)
+BOOST_SPIRIT_DEFINE(plain_text)
 BOOST_SPIRIT_DEFINE(paragraph)
 BOOST_SPIRIT_DEFINE(paragraph_breaker)
 BOOST_SPIRIT_DEFINE(argument)

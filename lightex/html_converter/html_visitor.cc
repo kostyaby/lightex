@@ -107,16 +107,16 @@ Result Result::Success(const std::string& html_text) {
   return {true, html_text};
 }
 
-Result HtmlVisitor::operator()(const std::string& plain_text) {
-  if (active_unescaped_num_) {
-    return Result::Success(plain_text);
-  } else {
-    return Result::Success(EscapeStringForHtml(plain_text));
-  }
-}
-
 Result HtmlVisitor::operator()(const ast::Program& program) {
   return JoinNodeResults(program.nodes, "\n", this);
+}
+
+Result HtmlVisitor::operator()(const ast::PlainText& plain_text) {
+  if (active_unescaped_num_) {
+    return Result::Success(plain_text.text);
+  } else {
+    return Result::Success(EscapeStringForHtml(plain_text.text));
+  }
 }
 
 Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {

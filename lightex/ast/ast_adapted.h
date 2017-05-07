@@ -10,6 +10,8 @@
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Program, (std::list<lightex::ast::ProgramNode>, nodes))
 
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::PlainText, (std::string, text))
+
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Paragraph, (std::list<lightex::ast::ParagraphNode>, nodes))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::ParagraphBreaker)

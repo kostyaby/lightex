@@ -22,8 +22,8 @@ class HtmlVisitor : public boost::static_visitor<Result> {
  public:
   HtmlVisitor() {}
 
-  Result operator()(const std::string& plain_text);
   Result operator()(const ast::Program& program);
+  Result operator()(const ast::PlainText& plain_text);
   Result operator()(const ast::Paragraph& paragraph);
   Result operator()(const ast::ParagraphBreaker& paragraph_breaker);
   Result operator()(const ast::Argument& argument);

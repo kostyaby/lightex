@@ -16,6 +16,7 @@ namespace ast {
 namespace x3 = boost::spirit::x3;
 
 struct Program;
+struct PlainText;
 struct Paragraph;
 struct ParagraphBreaker;
 struct Argument;
@@ -38,12 +39,13 @@ struct ProgramNode : x3::variant<x3::forward_ast<ParagraphBreaker>,
   using base_type::operator=;
 };
 
-struct ParagraphNode : x3::variant<std::string, x3::forward_ast<InlinedMathText>, x3::forward_ast<Command>> {
+struct ParagraphNode
+    : x3::variant<x3::forward_ast<PlainText>, x3::forward_ast<InlinedMathText>, x3::forward_ast<Command>> {
   using base_type::base_type;
   using base_type::operator=;
 };
 
-struct ArgumentNode : x3::variant<std::string,
+struct ArgumentNode : x3::variant<x3::forward_ast<PlainText>,
                                   x3::forward_ast<InlinedMathText>,
                                   x3::forward_ast<Command>,
                                   x3::forward_ast<ArgumentRef>,
@@ -54,6 +56,10 @@ struct ArgumentNode : x3::variant<std::string,
 
 struct Program : x3::position_tagged {
   std::list<ProgramNode> nodes;
+};
+
+struct PlainText : x3::position_tagged {
+  std::string text;
 };
 
 struct Paragraph : x3::position_tagged {

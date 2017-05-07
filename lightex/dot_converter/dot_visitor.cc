@@ -23,13 +23,6 @@ std::string EscapeForDot(const std::string& s) {
 
 DotVisitor::DotVisitor(std::string* output) : output_(output), next_node_id_(0) {}
 
-NodeId DotVisitor::operator()(const std::string& plain_text) {
-  NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text) + ">\"];\n");
-
-  return node_id;
-}
-
 NodeId DotVisitor::operator()(const ast::Program& program) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"PROGRAM\"];\n");
@@ -38,6 +31,13 @@ NodeId DotVisitor::operator()(const ast::Program& program) {
     NodeId child_id = boost::apply_visitor(*this, program_node);
     AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
   }
+
+  return node_id;
+}
+
+NodeId DotVisitor::operator()(const ast::PlainText& plain_text) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"PLAIN_TEXT = <" + EscapeForDot(plain_text.text) + ">\"];\n");
 
   return node_id;
 }
