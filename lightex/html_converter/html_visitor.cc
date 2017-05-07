@@ -1,5 +1,7 @@
 #include <lightex/html_converter/html_visitor.h>
 
+#include <list>
+
 namespace lightex {
 namespace html_converter {
 namespace {
@@ -34,6 +36,30 @@ std::string EscapeStringForHtml(const std::string& unescaped) {
 
   return result;
 }
+
+template<typename Node, typename Visitor>
+Result JoinNodeResults(const std::list<Node>& nodes, const std::string& separator, Visitor* visitor) {
+  std::string result;
+
+  std::string current_separator = "";
+  for (const auto& node : nodes) {
+    Result child_result = boost::apply_visitor(*visitor, node);
+    if (!child_result.is_successful) {
+      return child_result;
+    }
+
+    if (child_result.value.empty()) {
+      continue;
+    }
+
+    result += current_separator;
+    result += child_result.value;
+
+    current_separator = separator;
+  }
+
+  return Result::Success(result);
+};
 }  // namespace
 
 Result Result::Failure(const std::string& error_message) {
@@ -44,67 +70,33 @@ Result Result::Success(const std::string& html_text) {
   return {true, html_text};
 }
 
+Result HtmlVisitor::operator()(const std::string& plain_text) {
+  return Result::Success(EscapeStringForHtml(plain_text));
+}
+
 Result HtmlVisitor::operator()(const ast::Program& program) {
-  std::string html_text = "";
+  return JoinNodeResults(program.nodes, "\n", this);
+}
 
-  for (const auto& node : program.nodes) {
-    Result child_result = boost::apply_visitor(*this, node);
-    if (!child_result.is_successful) {
-      return child_result;
-    }
-
-    html_text += child_result.value;
+Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {
+  Result result = JoinNodeResults(paragraph.nodes, " ", this);
+  if (!result.is_successful) {
+    return result;
   }
 
-  if (is_paragraph_open.back()) {
-    html_text += "</p>";
+  if (active_macro_definitions_num_ == 0) {
+    result.value = "<p>" + result.value + "</p>";
   }
 
-  return Result::Success(html_text);
+  return result;
 }
 
 Result HtmlVisitor::operator()(const ast::ParagraphBreaker& paragraph_breaker) {
-  return Result::Failure("ParagraphBreaker node parser is not implemented yet.");
+  return Result::Success("");
 }
 
-Result HtmlVisitor::operator()(const std::string& plain_text) {
-  std::string html_text = "";
-
-  int consecutive_new_lines = 0;
-  int consecutive_spaces = 0;
-  for (char c : plain_text) {
-    if (c == '\n') {
-      ++consecutive_new_lines;
-      continue;
-    } else if (c == ' ') {
-      ++consecutive_spaces;
-      continue;
-    }
-
-    if (consecutive_new_lines > 0) {
-      if (is_paragraphical_program.back() && consecutive_new_lines > 1) {
-        html_text += "</p>";
-        is_paragraph_open.back() = false;
-      } else {
-        consecutive_spaces = 1;
-      }
-      consecutive_new_lines = 0;
-    }
-
-    if (consecutive_spaces > 0) {
-      if (is_paragraph_open.back()) {
-        html_text += ' ';
-      }
-      consecutive_spaces = 0;
-    }
-
-    if (is_paragraphical_program.back() && !is_paragraph_open.back()) {
-      html_text += "<p>";
-      is_paragraph_open.back() = true;
-    }
-
-    html_text += EscapeCharForHtml(c);
-  }
+Result HtmlVisitor::operator()(const ast::Argument& argument) {
+  return JoinNodeResults(argument.nodes, " ", this);
 }
 
 Result HtmlVisitor::operator()(const ast::ArgumentRef& argument_ref) {
@@ -133,10 +125,6 @@ Result HtmlVisitor::operator()(const ast::EnvironmentMacro& environment_macro) {
 
 Result HtmlVisitor::operator()(const ast::Command& command) {
   return Result::Failure("Command node parser is not implemented yet.");
-}
-
-Result HtmlVisitor::operator()(const ast::TabularEnvironment& tabular_environment) {
-  return Result::Failure("TabularEnvironment node parser is not implemented yet.");
 }
 
 Result HtmlVisitor::operator()(const ast::Environment& environment) {

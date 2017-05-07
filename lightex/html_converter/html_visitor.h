@@ -22,11 +22,15 @@ class HtmlVisitor : public boost::static_visitor<Result> {
  public:
   HtmlVisitor() {}
 
+  Result operator()(const std::string& plain_text);
+
   Result operator()(const ast::Program& program);
+
+  Result operator()(const ast::Paragraph& paragraph);
 
   Result operator()(const ast::ParagraphBreaker& paragraph_breaker);
 
-  Result operator()(const std::string& plain_text);
+  Result operator()(const ast::Argument& argument);
 
   Result operator()(const ast::ArgumentRef& argument_ref);
 
@@ -42,13 +46,10 @@ class HtmlVisitor : public boost::static_visitor<Result> {
 
   Result operator()(const ast::Command& command);
 
-  Result operator()(const ast::TabularEnvironment& tabular_environment);
-
   Result operator()(const ast::Environment& environment);
 
  private:
-  std::vector<bool> is_paragraphical_program = {true};
-  std::vector<bool> is_paragraph_open = {false};
+  int active_macro_definitions_num_ = 0;
 };
 
 }  // namespace html_converter
