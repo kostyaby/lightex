@@ -30,7 +30,7 @@
 % {\tag{/ul}}
 
 % \newenvironment{abc}[4] [1][2][3][4]{
-%   \newcommand{\def}[2]{$a ^ 2 + b ^ 2 = c ^ 2$ ##1 #2 ##3}
+%   \newcommand{\def}[2]{$a ^ 2 + b ^ 2 = c ^ 2$ ##1 #2 ##3}--
 % }{}
 % \newcommand{\item}[1]{\tag{li}#1\tag{/li}}
 % \newcommand{\newline}{\tag{br}}
@@ -53,12 +53,14 @@ kjqnwkenwqjke
 
 jkenwqkjenkqwjenjk
 
-
+\newcommand{\Unescaped}[1]{#1}
+\newcommand{\textbf}[1]{\Unescaped{<b>#1</b>}}
+\newcommand{\textit}[1]{\Unescaped{<i>#1</i>}}
 
 klkjenqwkenwqjkewqjknejn asf asd asad
 $\frac{a}{b}$ jkenwqkjenkqwjenjk
 
-jkenwqkjenkqwjenjk
+\textit{\textbf{jkenwqkjenkqwjenjk}}
 
 $$
 a = b \leftrightarrow b = a
