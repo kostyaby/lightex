@@ -1,45 +1,63 @@
 #include <lightex/html_converter/html_visitor.h>
 
 #include <list>
+#include <iomanip>
+#include <sstream>
 
 namespace lightex {
 namespace html_converter {
 namespace {
 
-std::string EscapeCharForHtml(char c) {
-  switch (c) {
-    case '&':
-      return "&amp;";
-
-    case '\"':
-      return "&quot;";
-
-    case '\'':
-      return "&apos;";
-
-    case '<':
-      return "&lt;";
-
-    case '>':
-      return "&gt;";
-
-    default: { return std::string(1, c); }
-  }
-}
-
 std::string EscapeStringForHtml(const std::string& unescaped) {
-  std::string result;
+  std::ostringstream buffer;
 
   for (char c : unescaped) {
-    result += EscapeCharForHtml(c);
+    switch (c) {
+      case '&':
+        buffer << "&amp;";
+        break;
+
+      case '\"':
+        buffer << "&quot;";
+        break;
+
+      case '\'':
+        buffer << "&apos;";
+        break;
+
+      case '<':
+        buffer << "&lt;";
+        break;
+
+      case '>':
+        buffer << "&gt;";
+        break;
+
+      default:
+        buffer << c;
+    }
   }
 
-  return result;
+  return buffer.str();
 }
 
-template<typename Node, typename Visitor>
+std::string EscapeStringForJs(const std::string& unescaped) {
+  std::ostringstream buffer;
+
+  for (char c : unescaped) {
+    if (c == '"' || c == '\\' || ('\x00' <= c && c <= '\x1f')) {
+      buffer << "\\u" << std::hex << std::setw(4) << std::setfill('0') << (int)c;
+    } else {
+      buffer << c;
+    }
+  }
+
+  return buffer.str();
+}
+
+template <typename Node, typename Visitor>
 Result JoinNodeResults(const std::list<Node>& nodes, const std::string& separator, Visitor* visitor) {
-  std::string result;
+  std::ostringstream buffer;
 
   std::string current_separator = "";
   for (const auto& node : nodes) {
@@ -52,14 +70,30 @@ Result JoinNodeResults(const std::list<Node>& nodes, const std::string& separato
       continue;
     }
 
-    result += current_separator;
-    result += child_result.value;
+    buffer << current_separator;
+    buffer << child_result.value;
 
     current_separator = separator;
   }
 
-  return Result::Success(result);
+  return Result::Success(buffer.str());
 };
+
+std::string RenderMathFormula(const std::string& math_text, bool is_inlined, int* math_text_span_num) {
+  std::string span_id = "mathTextSpan" + std::to_string(++(*math_text_span_num));
+  std::string display_mode = is_inlined ? "false" : "true";
+
+  std::ostringstream buffer;
+  buffer << "<span id=\"" << span_id << "\"></span>";
+
+  buffer << "<script type=\"text/javascript\">";
+  buffer << "katex.render(";
+  buffer << "\"" << EscapeStringForJs(math_text) << "\", ";
+  buffer << "document.getElementById(\"" << span_id << "\"), {displayMode: " << display_mode << "});";
+  buffer << "</script>";
+
+  return buffer.str();
+}
 }  // namespace
 
 Result Result::Failure(const std::string& error_message) {
@@ -108,11 +142,11 @@ Result HtmlVisitor::operator()(const ast::OuterArgumentRef& outer_argument_ref) 
 }
 
 Result HtmlVisitor::operator()(const ast::InlinedMathText& math_text) {
-  return Result::Failure("InlinedMathText node parser is not implemented yet.");
+  return Result::Success(RenderMathFormula(math_text.text, true, &math_text_span_num_));
 }
 
 Result HtmlVisitor::operator()(const ast::MathText& math_text) {
-  return Result::Failure("MathText node parser is not implemented yet.");
+  return Result::Success(RenderMathFormula(math_text.text, false, &math_text_span_num_));
 }
 
 Result HtmlVisitor::operator()(const ast::CommandMacro& command_macro) {

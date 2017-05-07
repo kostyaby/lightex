@@ -50,6 +50,7 @@ class HtmlVisitor : public boost::static_visitor<Result> {
 
  private:
   int active_macro_definitions_num_ = 0;
+  int math_text_span_num_ = 0;
 };
 
 }  // namespace html_converter

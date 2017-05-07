@@ -1,13 +1,52 @@
-\textbf{Hey there!}
-% This is a comment
-{\text\\ \emph{We need to go deeper! Or so Leo says.}} % this is a comment as well
+% \textbf{Hey there!}
+% % This is a comment
+% {\text\\ \emph{We need to go deeper! Or so Leo says.}} % this is a comment as well
 
-\begin{a}{x=3}
-  \begin{b}{1}{2}{3}
-    $a = \frac{b + c}{d}$
-  \end{b}
-\end{a}
+% \begin{a}{x=3}
+%   \begin{b}{1}{2}{3}
+%     $a = \frac{b + c}{d}$
+%   \end{b}
+% \end{a}
 
+
+% klkjenqwkenwqjkewqjknejn asf asd asad
+% kjqnwkenwqjke
+
+% jkenwqkjenkqwjenjk
+
+
+
+% klkjenqwkenwqjkewqjknejn asf asd asad
+% $\frac{a}{b}$ jkenwqkjenkqwjenjk
+
+% jkenwqkjenkqwjenjk
+
+% $$
+% a = b \leftrightarrow b = a
+% $$
+
+% \newenvironment{itemize}
+% {\tag{ul}}
+% {\tag{/ul}}
+
+% \newenvironment{abc}[4] [1][2][3][4]{
+%   \newcommand{\def}[2]{$a ^ 2 + b ^ 2 = c ^ 2$ ##1 #2 ##3}
+% }{}
+% \newcommand{\item}[1]{\tag{li}#1\tag{/li}}
+% \newcommand{\newline}{\tag{br}}
+
+% \begin{abc}[5][6][7][8]
+% \end{abc}
+
+% \begin{center}
+%   \begin{tabular}{ | l | c | r }
+%     \hline
+%     1 \& 2 \& 3 \\ \hline
+%     4 \& 5 \& 6 \\ \hline
+%     7 \& 8 \& 9 \\
+%     \hline
+%   \end{tabular}
+% \end{center}
 
 klkjenqwkenwqjkewqjknejn asf asd asad
 kjqnwkenwqjke
@@ -16,31 +55,11 @@ jkenwqkjenkqwjenjk
 
 
 
-$\frac{a}{b}$
+klkjenqwkenwqjkewqjknejn asf asd asad
+$\frac{a}{b}$ jkenwqkjenkqwjenjk
+
+jkenwqkjenkqwjenjk
 
 $$
 a = b \leftrightarrow b = a
 $$
-
-\newenvironment{itemize}
-{\tag{ul}}
-{\tag{/ul}}
-
-\newenvironment{abc}[4] [1][2][3][4]{
-  \newcommand{\def}[2]{$a ^ 2 + b ^ 2 = c ^ 2$ ##1 #2 ##3}
-}{}
-\newcommand{\item}[1]{\tag{li}#1\tag{/li}}
-\newcommand{\newline}{\tag{br}}
-
-\begin{abc}[5][6][7][8]
-\end{abc}
-
-\begin{center}
-  \begin{tabular}{ | l | c | r }
-    \hline
-    1 \& 2 \& 3 \\ \hline
-    4 \& 5 \& 6 \\ \hline
-    7 \& 8 \& 9 \\
-    \hline
-  \end{tabular}
-\end{center}

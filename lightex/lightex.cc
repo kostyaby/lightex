@@ -80,7 +80,16 @@ bool ParseProgramToHtml(const std::string& input, std::string* error_message, st
     return false;
   }
 
-  *output = result.value;
+  *output = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\"><title>LighTeX</title>\n"
+            "<style>.tex-center p {text-align: center;}</style>\n"
+            "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css\" "
+            "integrity=\"sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0\" "
+            " crossorigin=\"anonymous\">\n"
+            "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js\" "
+            "integrity=\"sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1\" "
+            "crossorigin=\"anonymous\"></script>\n</head>\n<body>\n";
+  *output += result.value;
+  *output += "</body></html>";
   return true;
 }
 
