@@ -53,6 +53,11 @@ kjqnwkenwqjke
 
 jkenwqkjenkqwjenjk
 
+\newenvironment{itemize}{
+  \newcommand{\item}[1]{\unescaped{<li>#1</li>}}
+  \unescaped{<ul>}
+}{   \unescaped   {</ul>}  }
+
 \newcommand{\textbf}[1]{\unescaped{<b>#1</b>}}
 \newcommand{\textit}[1]{\unescaped{<i>#1</i>}}
 
@@ -64,3 +69,9 @@ $\frac{a}{b}$ jkenwqkjenkqwjenjk
 $$
 a = b \leftrightarrow b = a
 $$
+
+\begin{itemize}
+  \item{A}
+  \item{B}
+  \item{C}
+\end{itemize}

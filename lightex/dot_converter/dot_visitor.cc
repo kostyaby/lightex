@@ -173,7 +173,7 @@ NodeId DotVisitor::operator()(const ast::UnescapedCommand& unescaped_command) {
 
 NodeId DotVisitor::operator()(const ast::Environment& environment) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <begin_name=" + environment.begin_name);
+  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <name=" + environment.name);
   AppendToOutput(" end_name=" + environment.end_name + ">\"];\n");
 
   for (const auto& argument : environment.default_arguments) {

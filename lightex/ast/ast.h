@@ -117,7 +117,7 @@ struct UnescapedCommand : x3::position_tagged {
 };
 
 struct Environment : x3::position_tagged {
-  std::string begin_name;
+  std::string name;
   std::list<Argument> default_arguments;
   std::list<Argument> arguments;
   Program program;

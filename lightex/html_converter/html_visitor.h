@@ -38,18 +38,26 @@ class HtmlVisitor : public boost::static_visitor<Result> {
   Result operator()(const ast::Environment& environment);
 
  private:
+  template <typename Node>
+  Result JoinNodeResults(const std::list<Node>& nodes, const std::string& separator);
+
+  template <typename Macro, typename MacroDefinition>
+  Result PrepareMacroArguments(const Macro& macro,
+                               const MacroDefinition& macro_definition,
+                               std::vector<std::string>* output_args);
+
   const ast::CommandMacro* GetDefinedCommandMacro(const std::string& name) const;
+  const ast::EnvironmentMacro* GetDefinedEnvironmentMacro(const std::string& name) const;
   const std::string* GetArgumentByReference(int index, bool is_outer) const;
 
-  // Always std::move argument_vector to gain efficiency.
-  void PushArgumentVector(std::vector<std::string> argument_vector);
-  void PopArgumentVector();
-
-  int active_macro_definitions_num_ = 0;
-  int math_text_span_num_ = 0;
+  int active_environment_definitions_num_ = 0;
   int active_unescaped_num_ = 0;
-  std::vector<std::vector<std::string>> argument_vector_stack_;
+  int math_text_span_num_ = 0;
+  std::vector<std::vector<std::string>> arguments_stack_;
+  std::vector<std::vector<std::string>> outer_arguments_stack_;
+
   std::list<ast::CommandMacro> defined_command_macros_;
+  std::list<ast::EnvironmentMacro> defined_environment_macros_;
 };
 
 }  // namespace html_converter

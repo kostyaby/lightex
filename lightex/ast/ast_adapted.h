@@ -47,7 +47,7 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Command,
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::UnescapedCommand, (lightex::ast::Argument, body))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Environment,
-                          (std::string, begin_name),
+                          (std::string, name),
                           (std::list<lightex::ast::Argument>, default_arguments),
                           (std::list<lightex::ast::Argument>, arguments),
                           (lightex::ast::Program, program),
