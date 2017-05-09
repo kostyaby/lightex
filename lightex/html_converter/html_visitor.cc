@@ -9,6 +9,26 @@ namespace lightex {
 namespace html_converter {
 namespace {
 
+std::string FormatText(const std::string& unformatted) {
+  std::ostringstream buffer;
+
+  bool previous_is_space = false;
+  for (char c : unformatted) {
+    if (std::isspace(c)) {
+      if (!previous_is_space) {
+        buffer << ' ';
+      }
+      previous_is_space = true;
+      continue;
+    }
+
+    buffer << c;
+    previous_is_space = false;
+  }
+
+  return buffer.str();
+}
+
 std::string EscapeStringForHtml(const std::string& unescaped) {
   std::ostringstream buffer;
 
@@ -94,15 +114,15 @@ Result Result::Success(const std::string& escaped, const std::string& unescaped)
 }
 
 Result HtmlVisitor::operator()(const ast::Program& program) {
-  return JoinNodeResults(program.nodes, "\n");
+  return JoinNodeResults(program.nodes);
 }
 
 Result HtmlVisitor::operator()(const ast::PlainText& plain_text) {
-  return Result::Success(EscapeStringForHtml(plain_text.text), plain_text.text);
+  return Result::Success(EscapeStringForHtml(FormatText(plain_text.text)), plain_text.text);
 }
 
 Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {
-  Result result = JoinNodeResults(paragraph.nodes, " ");
+  Result result = JoinNodeResults(paragraph.nodes);
   if (!result.is_successful) {
     return result;
   }
@@ -120,7 +140,7 @@ Result HtmlVisitor::operator()(const ast::ParagraphBreaker& paragraph_breaker) {
 }
 
 Result HtmlVisitor::operator()(const ast::Argument& argument) {
-  return JoinNodeResults(argument.nodes, " ");
+  return JoinNodeResults(argument.nodes);
 }
 
 Result HtmlVisitor::operator()(const ast::ArgumentRef& argument_ref) {
@@ -266,36 +286,29 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
 }
 
 Result HtmlVisitor::operator()(const ast::VerbatimEnvironment& verbatim_environment) {
-  std::string escaped = "<pre>" + verbatim_environment.content + "</pre>";
+  Result result = (*this)(verbatim_environment.program);
 
-  return Result::Success(escaped, escaped);
+  if (result.is_successful) {
+    result.unescaped = "<pre>" + result.unescaped + "</pre>";
+    result.escaped = result.unescaped;
+  }
+
+  return result;
 }
 
 template <typename Node>
-Result HtmlVisitor::JoinNodeResults(const std::list<Node>& nodes, const std::string& separator) {
+Result HtmlVisitor::JoinNodeResults(const std::list<Node>& nodes) {
   std::ostringstream escaped;
   std::ostringstream unescaped;
 
-  std::string escaped_separator = "";
-  std::string unescaped_separator = "";
   for (const auto& node : nodes) {
     Result child_result = boost::apply_visitor(*this, node);
     if (!child_result.is_successful) {
       return child_result;
     }
 
-    if (!child_result.escaped.empty()) {
-      escaped << escaped_separator;
-      escaped << child_result.escaped;
-      escaped_separator = separator;
-    }
-
-    if (!child_result.unescaped.empty()) {
-      unescaped << unescaped_separator;
-      unescaped << child_result.unescaped;
-
-      unescaped_separator = separator;
-    }
+    escaped << child_result.escaped;
+    unescaped << child_result.unescaped;
   }
 
   return Result::Success(escaped.str(), unescaped.str());

@@ -129,7 +129,7 @@ struct Environment : x3::position_tagged {
 };
 
 struct VerbatimEnvironment : x3::position_tagged {
-  std::string content;
+  Program program;
 };
 }  // namespace ast
 }  // namespace lightex

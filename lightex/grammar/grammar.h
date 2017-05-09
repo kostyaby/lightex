@@ -44,7 +44,8 @@ const auto environment_identifier = x3::lexeme[+x3::alpha] - "verbatim";
 const auto program_node_def = paragraph_breaker | paragraph | math_text | environment | verbatim_environment |
                               command_macro | environment_macro | argument_ref | outer_argument_ref;
 
-const auto plain_text_def = x3::lexeme[unicode_symbol | (+(control_symbol | (x3::char_ - special_symbol - x3::space)))];
+const auto plain_text_def =
+    x3::no_skip[unicode_symbol | (+(control_symbol | (x3::char_ - special_symbol - x3::lit('\n')))) | x3::string("\n")];
 
 const auto paragraph_node_def = &(!x3::omit[paragraph_breaker]) >>
                                 (plain_text | inlined_math_text | command | unescaped_command);
@@ -82,8 +83,8 @@ const auto unescaped_command_def = x3::lit("\\unescaped") >> '{' >> argument >> 
 const auto environment_def = x3::lit("\\begin") >> '{' >> environment_identifier >> '}' >> *('[' >> argument >> ']') >>
                              *('{' >> argument >> '}') >> program >> "\\end" >> '{' >> environment_identifier >> '}';
 
-const auto verbatim_environment_def = x3::lit("\\begin") >> '{' >> "verbatim" >> '}' >>
-                                      x3::no_skip[*verbatim_environment_symbol] >> "\\end" >> '{' >> "verbatim" >> '}';
+const auto verbatim_environment_def =
+    x3::lit("\\begin") >> '{' >> "verbatim" >> '}' >> program >> "\\end" >> '{' >> "verbatim" >> '}';
 
 BOOST_SPIRIT_DEFINE(program_node)
 BOOST_SPIRIT_DEFINE(paragraph_node)

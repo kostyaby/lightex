@@ -43,7 +43,7 @@ class HtmlVisitor : public boost::static_visitor<Result> {
 
  private:
   template <typename Node>
-  Result JoinNodeResults(const std::list<Node>& nodes, const std::string& separator);
+  Result JoinNodeResults(const std::list<Node>& nodes);
 
   template <typename Macro, typename MacroDefinition>
   Result PrepareMacroArguments(const Macro& macro,

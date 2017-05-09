@@ -53,4 +53,4 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Environment,
                           (lightex::ast::Program, program),
                           (std::string, end_name))
 
-BOOST_FUSION_ADAPT_STRUCT(lightex::ast::VerbatimEnvironment, (std::string, content))
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::VerbatimEnvironment, (lightex::ast::Program, program))
