@@ -6,14 +6,17 @@
 namespace lightex {
 namespace html_converter {
 
-std::vector<std::string> kRegexReplaceParams = {"~", "\\unescaped{&nbsp;}", "---", "\\unescaped{&mdash;}"};
+const std::vector<std::pair<std::string, std::string>> kRegexReplaceParams = {
+  {"~", "\\unescaped{&nbsp;}"},
+  {"---", "\\unescaped{&mdash;}"},
+};
 
 std::string PreprocessHtmlInput(const std::string& input) {
   std::string result = input;
 
-  for (int i = 0; 2 * i + 1 < kRegexReplaceParams.size(); ++i) {
-    std::regex expression(kRegexReplaceParams[2 * i]);
-    result = std::regex_replace(result, expression, kRegexReplaceParams[2 * i + 1]);
+  for (const auto& pair : kRegexReplaceParams) {
+    std::regex expression(pair.first);
+    result = std::regex_replace(result, expression, pair.second);
   }
 
   return result;

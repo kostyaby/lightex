@@ -23,8 +23,6 @@ set(lightex_src_files ${lightex_src_files}
     ${lightex_root}/lightex/html_converter/html_preprocessor.h
     ${lightex_root}/lightex/html_converter/html_visitor.cc
     ${lightex_root}/lightex/html_converter/html_visitor.h
-    ${lightex_root}/lightex/utils/comment_remover.cc
-    ${lightex_root}/lightex/utils/comment_remover.h
     ${lightex_root}/lightex/utils/file_utils.cc
     ${lightex_root}/lightex/utils/file_utils.h
 )

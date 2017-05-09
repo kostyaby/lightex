@@ -296,14 +296,9 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
 }
 
 Result HtmlVisitor::operator()(const ast::VerbatimEnvironment& verbatim_environment) {
-  Result result = (*this)(verbatim_environment.program);
+  std::string html_text = "<pre>" + verbatim_environment.content + "</pre>";
 
-  if (result.is_successful) {
-    result.unescaped = "<pre>" + result.unescaped + "</pre>";
-    result.escaped = result.unescaped;
-  }
-
-  return result;
+  return Result::Success(html_text, html_text);
 }
 
 template <typename Node>

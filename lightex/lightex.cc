@@ -35,7 +35,7 @@ bool ParseProgramToAst(const std::string& input, std::string* error_message, ast
     return false;
   }
 
-  std::string preprocessed_input = html_converter::PreprocessHtmlInput(utils::RemoveCommentsFromProgram(input));
+  std::string preprocessed_input = html_converter::PreprocessHtmlInput(input);
 
   std::string::const_iterator start = preprocessed_input.begin();
   std::string::const_iterator iter = start;

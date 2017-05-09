@@ -41,18 +41,20 @@ const auto command_identifier = x3::lexeme['\\' >> (+x3::alpha - special_command
 const auto math_text_symbol = (x3::char_ - x3::char_('$'));
 const auto environment_identifier = x3::lexeme[+x3::alpha] - "verbatim";
 const auto plain_text_symbol = control_symbol | (x3::char_ - special_symbol - x3::lit('\n'));
+const auto verbatim_symbol = x3::char_ - '\\';
+const auto comment = x3::omit[x3::no_skip[x3::lit('%') >> *(x3::char_ - '\n') >> (x3::eol | x3::eoi)]];
 
 const auto program_node_def = paragraph_breaker | paragraph | math_text | environment | verbatim_environment |
-                              command_macro | environment_macro | argument_ref | outer_argument_ref;
+                              command_macro | environment_macro | argument_ref | outer_argument_ref | comment;
 
 const auto plain_text_def =
     x3::no_skip[unicode_symbol | x3::string("\n") | (+(-x3::char_('\n') >> plain_text_symbol))];
 
 const auto paragraph_node_def = &(!x3::omit[paragraph_breaker]) >>
-                                (plain_text | inlined_math_text | command | unescaped_command | nparagraph_command);
+                                (plain_text | inlined_math_text | command | unescaped_command | nparagraph_command | comment);
 
 const auto argument_node_def =
-    plain_text | inlined_math_text | command | unescaped_command | nparagraph_command | argument_ref | outer_argument_ref;
+    plain_text | inlined_math_text | command | unescaped_command | nparagraph_command | argument_ref | outer_argument_ref | comment;
 
 const auto program_def = *program_node;
 
@@ -87,7 +89,7 @@ const auto environment_def = x3::lit("\\begin") >> '{' >> environment_identifier
                              *('{' >> argument >> '}') >> program >> "\\end" >> '{' >> environment_identifier >> '}';
 
 const auto verbatim_environment_def =
-    x3::lit("\\begin") >> '{' >> "verbatim" >> '}' >> program >> "\\end" >> '{' >> "verbatim" >> '}';
+    x3::lit("\\begin") >> '{' >> "verbatim" >> '}' >> x3::no_skip[*verbatim_symbol] >> "\\end" >> '{' >> "verbatim" >> '}';
 
 BOOST_SPIRIT_DEFINE(program_node)
 BOOST_SPIRIT_DEFINE(paragraph_node)
