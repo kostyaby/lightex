@@ -7,8 +7,8 @@ namespace lightex {
 namespace html_converter {
 
 const std::vector<std::pair<std::string, std::string>> kRegexReplaceParams = {
-  {"~", "\\unescaped{&nbsp;}"},
-  {"---", "\\unescaped{&mdash;}"},
+    {"~", "\\unescaped{&nbsp;}"},
+    {"---", "\\unescaped{&mdash;}"},
 };
 
 std::string PreprocessHtmlInput(const std::string& input) {

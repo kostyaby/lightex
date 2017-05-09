@@ -12,8 +12,8 @@ get_filename_component(lightex_root . ABSOLUTE)
 # Define LighTeX static library
 include_directories(${lightex_root})
 set(lightex_src_files ${lightex_src_files}
-    ${lightex_root}/lightex/lightex.cc
-    ${lightex_root}/lightex/lightex.h
+    ${lightex_root}/lightex/workspace.cc
+    ${lightex_root}/lightex/workspace.h
     ${lightex_root}/lightex/ast/ast.h
     ${lightex_root}/lightex/ast/ast_adapted.h
     ${lightex_root}/lightex/dot_converter/dot_visitor.cc

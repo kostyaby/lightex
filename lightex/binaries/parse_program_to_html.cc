@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include <lightex/lightex.h>
+#include <lightex/workspace.h>
 #include <lightex/utils/file_utils.h>
 
 int main(int argc, char** argv) {
@@ -22,16 +22,16 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  lightex::WorkspaceId workspace_id = "1";
+  std::shared_ptr<lightex::Workspace> workspace = lightex::MakeHtmlWorkspace();
   std::string error_message;
-  if (!lightex::PreloadStyleFileIntoWorkspace(workspace_id, "lightex/styles/lightex.sty", &error_message)) {
+  if (!workspace->LoadStyle("lightex/styles/lightex.sty", &error_message)) {
     std::cerr << "Error: failed to preload style file!" << std::endl;
     std::cerr << error_message << std::endl;
     return 1;
   }
 
   std::string result;
-  if (!lightex::ParseProgramToHtml(storage, workspace_id, &error_message, &result)) {
+  if (!workspace->ParseProgram(storage, &error_message, &result)) {
     std::cerr << "Error: failed to parse input!" << std::endl;
     std::cerr << error_message << std::endl;
     return 1;

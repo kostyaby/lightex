@@ -181,7 +181,6 @@ NodeId DotVisitor::operator()(const ast::NparagraphCommand& nparagraph_command) 
   return node_id;
 }
 
-
 NodeId DotVisitor::operator()(const ast::Environment& environment) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <name=" + environment.name);
@@ -205,7 +204,8 @@ NodeId DotVisitor::operator()(const ast::Environment& environment) {
 
 NodeId DotVisitor::operator()(const ast::VerbatimEnvironment& verbatim_environment) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"VERBATIM_ENVIRONMENT\" content=\"" + verbatim_environment.content + "\"];\n");
+  AppendToOutput("  " + node_id + " [label=\"VERBATIM_ENVIRONMENT\" content=\"" + verbatim_environment.content +
+                 "\"];\n");
 
   return node_id;
 }
