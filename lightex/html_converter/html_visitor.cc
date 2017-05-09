@@ -9,8 +9,6 @@ namespace lightex {
 namespace html_converter {
 namespace {
 
-const char kUnescapedCommandName[] = "Unescaped";
-
 std::string EscapeStringForHtml(const std::string& unescaped) {
   std::ostringstream buffer;
 
@@ -88,11 +86,11 @@ const MacroDefinition* GetMacroDefinition(const std::list<MacroDefinition>& macr
 }  // namespace
 
 Result Result::Failure(const std::string& error_message) {
-  return {false, error_message};
+  return {false, "", "", error_message};
 }
 
-Result Result::Success(const std::string& html_text) {
-  return {true, html_text};
+Result Result::Success(const std::string& escaped, const std::string& unescaped) {
+  return {true, escaped, unescaped, ""};
 }
 
 Result HtmlVisitor::operator()(const ast::Program& program) {
@@ -100,11 +98,7 @@ Result HtmlVisitor::operator()(const ast::Program& program) {
 }
 
 Result HtmlVisitor::operator()(const ast::PlainText& plain_text) {
-  if (active_unescaped_num_) {
-    return Result::Success(plain_text.text);
-  } else {
-    return Result::Success(EscapeStringForHtml(plain_text.text));
-  }
+  return Result::Success(EscapeStringForHtml(plain_text.text), plain_text.text);
 }
 
 Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {
@@ -114,14 +108,15 @@ Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {
   }
 
   if (active_environment_definitions_num_ == 0) {
-    result.value = "<p>" + result.value + "</p>";
+    result.escaped = "<p>" + result.escaped + "</p>";
+    result.unescaped = "<p>" + result.unescaped + "</p>";
   }
 
   return result;
 }
 
 Result HtmlVisitor::operator()(const ast::ParagraphBreaker& paragraph_breaker) {
-  return Result::Success("");
+  return Result::Success("", "");
 }
 
 Result HtmlVisitor::operator()(const ast::Argument& argument) {
@@ -129,29 +124,31 @@ Result HtmlVisitor::operator()(const ast::Argument& argument) {
 }
 
 Result HtmlVisitor::operator()(const ast::ArgumentRef& argument_ref) {
-  const std::string* argument = GetArgumentByReference(argument_ref.argument_id - 1, false);
+  const Result* argument = GetArgumentByReference(argument_ref.argument_id - 1, false);
   if (!argument) {
     return Result::Failure("Invalid argument reference.");
   }
 
-  return Result::Success(*argument);
+  return *argument;
 }
 
 Result HtmlVisitor::operator()(const ast::OuterArgumentRef& outer_argument_ref) {
-  const std::string* argument = GetArgumentByReference(outer_argument_ref.argument_id - 1, true);
+  const Result* argument = GetArgumentByReference(outer_argument_ref.argument_id - 1, true);
   if (!argument) {
     return Result::Failure("Invalid outer argument reference.");
   }
 
-  return Result::Success(*argument);
+  return *argument;
 }
 
 Result HtmlVisitor::operator()(const ast::InlinedMathText& math_text) {
-  return Result::Success(RenderMathFormula(math_text.text, true, &math_text_span_num_));
+  std::string render_result = RenderMathFormula(math_text.text, true, &math_text_span_num_);
+  return Result::Success(render_result, render_result);
 }
 
 Result HtmlVisitor::operator()(const ast::MathText& math_text) {
-  return Result::Success(RenderMathFormula(math_text.text, false, &math_text_span_num_));
+  std::string render_result = RenderMathFormula(math_text.text, false, &math_text_span_num_);
+  return Result::Success(render_result, render_result);
 }
 
 Result HtmlVisitor::operator()(const ast::CommandMacro& command_macro) {
@@ -160,22 +157,16 @@ Result HtmlVisitor::operator()(const ast::CommandMacro& command_macro) {
   }
 
   defined_command_macros_.push_back(command_macro);
-  return Result::Success("");
+  return Result::Success("", "");
 }
 
 Result HtmlVisitor::operator()(const ast::EnvironmentMacro& environment_macro) {
-  if (active_environment_definitions_num_ != 0) {
-    return Result::Failure(
-        "Nested environment definitions are not allowed. "
-        "Environment name = " +
-        environment_macro.name + ".");
-  }
   if (environment_macro.arguments_num.get_value_or(0) < environment_macro.default_arguments.size()) {
     return Result::Failure("Invalid number of arguments for environment macro " + environment_macro.name + ".");
   }
 
   defined_environment_macros_.push_back(environment_macro);
-  return Result::Success("");
+  return Result::Success("", "");
 }
 
 Result HtmlVisitor::operator()(const ast::Command& command) {
@@ -184,7 +175,7 @@ Result HtmlVisitor::operator()(const ast::Command& command) {
     return Result::Failure("Command macro " + command.name + " is not defined yet.");
   }
 
-  std::vector<std::string> args;
+  std::vector<Result> args;
   Result intermediate_result = PrepareMacroArguments(command, *command_macro_ptr, &args);
   if (!intermediate_result.is_successful) {
     return intermediate_result;
@@ -198,9 +189,11 @@ Result HtmlVisitor::operator()(const ast::Command& command) {
 }
 
 Result HtmlVisitor::operator()(const ast::UnescapedCommand& unescaped_command) {
-  active_unescaped_num_ += 1;
   Result result = (*this)(unescaped_command.body);
-  active_unescaped_num_ -= 1;
+
+  if (result.is_successful) {
+    result.escaped = result.unescaped;
+  }
 
   return result;
 }
@@ -216,7 +209,7 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
     return Result::Failure("Environment macro " + environment.name + " is not defined yet.");
   }
 
-  std::vector<std::string> args;
+  std::vector<Result> args;
   Result intermediate_result = PrepareMacroArguments(environment, *environment_macro_ptr, &args);
   if (!intermediate_result.is_successful) {
     return intermediate_result;
@@ -230,19 +223,19 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
     }
 
     arguments_stack_.pop_back();
-    outer_arguments_stack_.pop_back();
   };
 
-  arguments_stack_.push_back(args);                   // Making a copy.
-  outer_arguments_stack_.push_back(std::move(args));  // Moving as it's not needed later in the code.
+  arguments_stack_.push_back(std::move(args));
 
-  std::string html_text;
+  std::string escaped;
+  std::string unescaped;
 
   active_environment_definitions_num_ += 1;
   intermediate_result = (*this)(environment_macro_ptr->pre_program);
   active_environment_definitions_num_ -= 1;
   if (intermediate_result.is_successful) {
-    html_text += intermediate_result.value;
+    escaped += intermediate_result.escaped;
+    unescaped += intermediate_result.unescaped;
   } else {
     rollback();
     return intermediate_result;
@@ -250,7 +243,8 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
 
   intermediate_result = (*this)(environment.program);
   if (intermediate_result.is_successful) {
-    html_text += intermediate_result.value;
+    escaped += intermediate_result.escaped;
+    unescaped += intermediate_result.unescaped;
   } else {
     rollback();
     return intermediate_result;
@@ -260,44 +254,57 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
   intermediate_result = (*this)(environment_macro_ptr->post_program);
   active_environment_definitions_num_ -= 1;
   if (intermediate_result.is_successful) {
-    html_text += intermediate_result.value;
+    escaped += intermediate_result.escaped;
+    unescaped += intermediate_result.unescaped;
   } else {
     rollback();
     return intermediate_result;
   }
 
   rollback();
-  return Result::Success(html_text);
+  return Result::Success(escaped, unescaped);
+}
+
+Result HtmlVisitor::operator()(const ast::VerbatimEnvironment& verbatim_environment) {
+  std::string escaped = "<pre>" + verbatim_environment.content + "</pre>";
+
+  return Result::Success(escaped, escaped);
 }
 
 template <typename Node>
 Result HtmlVisitor::JoinNodeResults(const std::list<Node>& nodes, const std::string& separator) {
-  std::ostringstream buffer;
+  std::ostringstream escaped;
+  std::ostringstream unescaped;
 
-  std::string current_separator = "";
+  std::string escaped_separator = "";
+  std::string unescaped_separator = "";
   for (const auto& node : nodes) {
     Result child_result = boost::apply_visitor(*this, node);
     if (!child_result.is_successful) {
       return child_result;
     }
 
-    if (child_result.value.empty()) {
-      continue;
+    if (!child_result.escaped.empty()) {
+      escaped << escaped_separator;
+      escaped << child_result.escaped;
+      escaped_separator = separator;
     }
 
-    buffer << current_separator;
-    buffer << child_result.value;
+    if (!child_result.unescaped.empty()) {
+      unescaped << unescaped_separator;
+      unescaped << child_result.unescaped;
 
-    current_separator = separator;
+      unescaped_separator = separator;
+    }
   }
 
-  return Result::Success(buffer.str());
+  return Result::Success(escaped.str(), unescaped.str());
 };
 
 template <typename Macro, typename MacroDefinition>
 Result HtmlVisitor::PrepareMacroArguments(const Macro& macro,
                                           const MacroDefinition& macro_definition,
-                                          std::vector<std::string>* output_args) {
+                                          std::vector<Result>* output_args) {
   if (!output_args) {
     return Result::Failure("No place for preparing macro arguments is provided.");
   }
@@ -338,10 +345,10 @@ Result HtmlVisitor::PrepareMacroArguments(const Macro& macro,
       return child_result;
     }
 
-    output_args->at(i) = std::move(child_result.value);
+    output_args->at(i) = std::move(child_result);
   }
 
-  return Result::Success("");
+  return Result::Success("", "");
 }
 
 const ast::CommandMacro* HtmlVisitor::GetDefinedCommandMacro(const std::string& name) const {
@@ -352,12 +359,21 @@ const ast::EnvironmentMacro* HtmlVisitor::GetDefinedEnvironmentMacro(const std::
   return GetMacroDefinition(defined_environment_macros_, name);
 }
 
-const std::string* HtmlVisitor::GetArgumentByReference(int index, bool is_outer) const {
-  const auto& arguments_stack = is_outer ? outer_arguments_stack_ : arguments_stack_;
-  if (index < 0 || arguments_stack.size() == 0) {
+const Result* HtmlVisitor::GetArgumentByReference(int index, bool is_outer) const {
+  // std::cerr << "Index = " << index << ", is_outer = " << is_outer << "\n";
+  // for (int i = 0; i < arguments_stack_.size(); ++i) {
+  //   std::cerr << i << " --> ";
+  //   for (int j = 0; j < arguments_stack_[i].size(); ++j) {
+  //     std::cerr << arguments_stack_[i][j] << " ";
+  //   }
+  //   std::cerr << "\n";
+  // }
+
+  int arguments_stack_index = static_cast<int>(arguments_stack_.size()) - (is_outer ? 2 : 1);
+  if (index < 0 || arguments_stack_index < 0) {
     return nullptr;
   }
-  const auto& arguments = arguments_stack.back();
+  const auto& arguments = arguments_stack_[arguments_stack_index];
 
   if (arguments.size() <= index) {
     return nullptr;

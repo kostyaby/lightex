@@ -1,9 +1,10 @@
-cmake_minimum_required(VERSION 3.8.0)
+cmake_minimum_required(VERSION 3.7.1)
 
 # Define C++ variables
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_BUILD_TYPE Debug)
 
 # Define lightex_root variable
 get_filename_component(lightex_root . ABSOLUTE)
@@ -13,12 +14,14 @@ include_directories(${lightex_root})
 set(lightex_src_files ${lightex_src_files}
     ${lightex_root}/lightex/lightex.cc
     ${lightex_root}/lightex/dot_converter/dot_visitor.cc
+    ${lightex_root}/lightex/html_converter/html_preprocessor.cc
     ${lightex_root}/lightex/html_converter/html_visitor.cc
-    ${lightex_root}/lightex/utils/comment_remover.cc)
+    ${lightex_root}/lightex/utils/comment_remover.cc
+    ${lightex_root}/lightex/utils/file_utils.cc)
 add_library(lightex STATIC ${lightex_src_files})
 
 # Find Boost
-find_package(Boost 1.63 REQUIRED)
+find_package(Boost 1.64 REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIR})
 

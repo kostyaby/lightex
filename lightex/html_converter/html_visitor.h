@@ -12,10 +12,13 @@ namespace html_converter {
 
 struct Result {
   bool is_successful;
-  std::string value;  // If successful, it contains the resulting HTML code. Otherwise it contains error message.
+
+  std::string escaped;
+  std::string unescaped;
+  std::string error_message;
 
   static Result Failure(const std::string& error_message);
-  static Result Success(const std::string& html_code);
+  static Result Success(const std::string& escaped, const std::string& unescaped);
 };
 
 class HtmlVisitor : public boost::static_visitor<Result> {
@@ -36,6 +39,7 @@ class HtmlVisitor : public boost::static_visitor<Result> {
   Result operator()(const ast::Command& command);
   Result operator()(const ast::UnescapedCommand& unescaped_command);
   Result operator()(const ast::Environment& environment);
+  Result operator()(const ast::VerbatimEnvironment& verbatim_environment);
 
  private:
   template <typename Node>
@@ -44,17 +48,15 @@ class HtmlVisitor : public boost::static_visitor<Result> {
   template <typename Macro, typename MacroDefinition>
   Result PrepareMacroArguments(const Macro& macro,
                                const MacroDefinition& macro_definition,
-                               std::vector<std::string>* output_args);
+                               std::vector<Result>* output_args);
 
   const ast::CommandMacro* GetDefinedCommandMacro(const std::string& name) const;
   const ast::EnvironmentMacro* GetDefinedEnvironmentMacro(const std::string& name) const;
-  const std::string* GetArgumentByReference(int index, bool is_outer) const;
+  const Result* GetArgumentByReference(int index, bool is_outer) const;
 
   int active_environment_definitions_num_ = 0;
-  int active_unescaped_num_ = 0;
   int math_text_span_num_ = 0;
-  std::vector<std::vector<std::string>> arguments_stack_;
-  std::vector<std::vector<std::string>> outer_arguments_stack_;
+  std::vector<std::vector<Result>> arguments_stack_;
 
   std::list<ast::CommandMacro> defined_command_macros_;
   std::list<ast::EnvironmentMacro> defined_environment_macros_;

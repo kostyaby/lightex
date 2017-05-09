@@ -28,13 +28,17 @@ struct EnvironmentMacro;
 struct Command;
 struct UnescapedCommand;
 struct Environment;
+struct VerbatimEnvironment;
 
 struct ProgramNode : x3::variant<x3::forward_ast<ParagraphBreaker>,
                                  x3::forward_ast<Paragraph>,
                                  x3::forward_ast<MathText>,
                                  x3::forward_ast<Environment>,
+                                 x3::forward_ast<VerbatimEnvironment>,
                                  x3::forward_ast<CommandMacro>,
-                                 x3::forward_ast<EnvironmentMacro>> {
+                                 x3::forward_ast<EnvironmentMacro>,
+                                 x3::forward_ast<ArgumentRef>,
+                                 x3::forward_ast<OuterArgumentRef>> {
   using base_type::base_type;
   using base_type::operator=;
 };
@@ -124,5 +128,8 @@ struct Environment : x3::position_tagged {
   std::string end_name;
 };
 
+struct VerbatimEnvironment : x3::position_tagged {
+  std::string content;
+};
 }  // namespace ast
 }  // namespace lightex

@@ -1,0 +1,113 @@
+% \ProvidesPackage{LighTeX}
+
+\newcommand{\tag}[1]{\unescaped{#1}}
+
+\newcommand{\textbf}[1]{\unescaped{<b>}#1\unescaped{</b>}}
+\newcommand{\textsl}[1]{#1}
+\newcommand{\textit}[1]{\unescaped{<i>}#1\unescaped{</i>}}
+\newcommand{\texttt}[1]{\unescaped{<span style="font-family: monospace">}#1\unescaped{</span>}}
+\newcommand{\emph}[1]{\textit{#1}}
+
+\newcommand{\relax}{}
+
+\newcommand{\mbox}[1]{\unescaped{<span style="white-space: nowrap">}#1\unescaped{</span>}}
+
+\newenvironment{center}{\unescaped{<div style="text-align: center;">}}{\unescaped{</div>}}
+
+\newenvironment{itemize}{
+  \newcommand{\item}{\unescaped{</li>}\unescaped{<li>}}
+
+  \unescaped{<ul>}
+}{\unescaped{</li>}\unescaped{</ul>}}
+
+\newenvironment{enumerate}{
+  \newcommand{\item}{\unescaped{</li>}\unescaped{<li>}}
+
+  \unescaped{<ol>}
+}{\unescaped{</li>}\unescaped{</ol>}}
+
+\newcommand{\section}[1]{\unescaped{<div style="text-align: center;">}\unescaped{<h1>}#1\unescaped{</h1>}\unescaped{</div>}}
+\newcommand{\subsection}[1]{\unescaped{<h2>}#1\unescaped{</h2>}}
+
+\newenvironment{document}[2][UTF-8][]{
+  \unescaped{<!DOCTYPE html>}
+  \unescaped{<html>}
+  \unescaped{<head>}
+  \unescaped{<link rel="stylesheet" type="text/css" href="#2" />}
+  \unescaped{<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">}
+  \unescaped{<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous">}
+  \unescaped{</script>}
+  \unescaped{<meta http-equiv="Content-Type" content="text/html; charset=#1" />}
+  \unescaped{<body>}
+}{
+  \unescaped{</body>}
+  \unescaped{</html>}
+}
+
+\newcommand{\ProblemTitle}{}
+\newcommand{\InputFile}{\subsection{Формат входного файла}}
+\newcommand{\OutputFile}{\subsection{Формат выходного файла}}
+\newcommand{\Example}{\subsection{Пример}}
+\newcommand{\Examples}{\subsection{Примеры}}
+\newcommand{\Note}{\subsection{\textit{Замечание}}}
+\newcommand{\Notes}{\subsection{\textit{Замечания}}}
+
+\newcommand{\includegraphics}[1]{\unescaped{<img src="/fIpZ6d9gT5GYgPFox3cO/#1" />}}
+
+% \newenvironment{problem}[6]{
+%     \newenvironment{example}{
+%         \newcommand{\exmp}[2]{\unescaped{<tr>}
+%                               \unescaped{<td>}
+%                               #1
+%                               \unescaped{</td>}
+%                               \unescaped(</td>)
+%                               #2
+%                               \unescaped{</td>}
+%                               \unescaped{</tr>}}
+
+%         \unescaped{<table class="inputs-outputs">}
+%           \unescaped{<tr>}
+%           \unescaped{<th>}
+%           ##2
+%           \unescaped{</th>}
+%           \unescaped(</th>)
+%           ##3
+%           \unescaped{</th>}
+%           \unescaped{</tr>}
+%     }{\unescaped{</table>}}
+
+%     \section{\ProblemTitle{##1}}
+
+%     \unescaped{<div class="infos">}Имя входного файла: \texttt{##2}. \unescaped{</div>}
+
+%     Имя выходного файла: \texttt{##3}.
+
+%     Ограничение по памяти: \texttt{##5}.
+% }{
+% }
+
+\newenvironment{rawproblem}[2]{
+    \newenvironment{example}{
+        \newcommand{\exmp}[2]{
+                              \unescaped{<tr>}
+                                \unescaped{<td>}
+                                  #1
+                                \unescaped{</td>}
+                                \unescaped{<td>}
+                                  #2
+                                \unescaped{</td>}
+                              \unescaped{</tr>}
+                              }
+
+        \unescaped{<table class="inputs-outputs">}
+          \unescaped{<tr>}
+            \unescaped{<th>}
+              ##1
+            \unescaped{</th>}
+            \unescaped{<th>}
+              ##2
+            \unescaped{</th>}
+          \unescaped{</tr>}
+    }{\unescaped{</table>}}
+}{
+}

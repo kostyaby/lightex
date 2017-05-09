@@ -1,10 +1,15 @@
 #include <lightex/lightex.h>
 
+#include <map>
+#include <mutex>
+
 #include <lightex/ast/ast.h>
 #include <lightex/dot_converter/dot_visitor.h>
+#include <lightex/html_converter/html_preprocessor.h>
 #include <lightex/html_converter/html_visitor.h>
 #include <lightex/grammar/grammar.h>
 #include <lightex/utils/comment_remover.h>
+#include <lightex/utils/file_utils.h>
 
 #include <boost/spirit/home/x3.hpp>
 #include <boost/variant/static_visitor.hpp>
@@ -17,12 +22,20 @@ const int kFailedSnippetLength = 20;
 
 namespace x3 = boost::spirit::x3;
 
+struct Workspace {
+  html_converter::HtmlVisitor visitor;
+  std::mutex mtx;
+};
+
+std::map<WorkspaceId, Workspace> workspace_manager;
+std::mutex manager_mtx;
+
 bool ParseProgramToAst(const std::string& input, std::string* error_message, ast::Program* output) {
   if (!output) {
     return false;
   }
 
-  std::string preprocessed_input = utils::RemoveCommentsFromProgram(input);
+  std::string preprocessed_input = html_converter::PreprocessHtmlInput(utils::RemoveCommentsFromProgram(input));
 
   std::string::const_iterator start = preprocessed_input.begin();
   std::string::const_iterator iter = start;
@@ -39,6 +52,36 @@ bool ParseProgramToAst(const std::string& input, std::string* error_message, ast
     return false;
   }
 
+  return true;
+}
+
+bool GeneralParseProgramToHtml(const std::string& input, const WorkspaceId& workspace_id, std::string* error_message, std::string* output) {
+  ast::Program ast;
+  if (!ParseProgramToAst(input, error_message, &ast)) {
+    return false;
+  }
+
+  Workspace* workspace_ptr;
+  std::unique_lock<std::mutex> workspace_lock;
+  {
+    std::lock_guard<std::mutex> manager_lock(manager_mtx);
+    workspace_ptr = &workspace_manager[workspace_id];
+    workspace_lock = std::unique_lock<std::mutex>(workspace_ptr->mtx);
+  }
+
+  html_converter::HtmlVisitor visitor_copy = workspace_ptr->visitor;
+  html_converter::Result result = workspace_ptr->visitor(ast);
+  if (!result.is_successful) {
+    if (error_message) {
+      *error_message = result.error_message;
+    }
+    workspace_ptr->visitor = visitor_copy;
+    return false;
+  }
+
+  if (output) {
+    *output = result.escaped;
+  }
   return true;
 }
 }  // namespace
@@ -61,36 +104,21 @@ bool ParseProgramToDot(const std::string& input, std::string* error_message, std
   return true;
 }
 
-bool ParseProgramToHtml(const std::string& input, std::string* error_message, std::string* output) {
+bool PreloadStyleFileIntoWorkspace(const WorkspaceId& workspace_id, const std::string& style_file_path, std::string* error_message) {
+  std::string storage;
+  if (!lightex::utils::ReadDataFromFile(style_file_path, &storage)) {
+    return false;
+  }
+
+  return GeneralParseProgramToHtml(storage, workspace_id, error_message, nullptr);
+}
+
+bool ParseProgramToHtml(const std::string& input, const WorkspaceId& workspace_id, std::string* error_message, std::string* output) {
   if (!output) {
     return false;
   }
 
-  ast::Program ast;
-  if (!ParseProgramToAst(input, error_message, &ast)) {
-    return false;
-  }
-
-  html_converter::HtmlVisitor visitor;
-  html_converter::Result result = visitor(ast);
-  if (!result.is_successful) {
-    if (error_message) {
-      *error_message = result.value;
-    }
-    return false;
-  }
-
-  *output = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\"><title>LighTeX</title>\n"
-            "<style>.tex-center p {text-align: center;}</style>\n"
-            "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css\" "
-            "integrity=\"sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0\" "
-            " crossorigin=\"anonymous\">\n"
-            "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js\" "
-            "integrity=\"sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1\" "
-            "crossorigin=\"anonymous\"></script>\n</head>\n<body>\n";
-  *output += result.value;
-  *output += "</body></html>";
-  return true;
+  return GeneralParseProgramToHtml(input, workspace_id, error_message, output);
 }
 
 }  // namespace lightex

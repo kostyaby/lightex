@@ -196,6 +196,13 @@ NodeId DotVisitor::GenerateNodeId() {
   return "node_" + std::to_string(next_node_id_++);
 }
 
+NodeId DotVisitor::operator()(const ast::VerbatimEnvironment& verbatim_environment) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"VERBATIM_ENVIRONMENT\" text=\"" + verbatim_environment.content + "\"];\n");
+
+  return node_id;
+}
+
 void DotVisitor::AppendToOutput(const std::string& s) {
   if (!output_) {
     return;

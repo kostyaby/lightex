@@ -30,6 +30,7 @@ class DotVisitor : public boost::static_visitor<NodeId> {
   NodeId operator()(const ast::Command& command);
   NodeId operator()(const ast::UnescapedCommand& unescaped_command);
   NodeId operator()(const ast::Environment& environment);
+  NodeId operator()(const ast::VerbatimEnvironment& verbatim_environment);
 
  private:
   NodeId GenerateNodeId();

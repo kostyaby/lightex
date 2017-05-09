@@ -3,6 +3,7 @@
 #include <string>
 
 #include <lightex/lightex.h>
+#include <lightex/utils/file_utils.h>
 
 int main(int argc, char** argv) {
   char const* input_file;
@@ -16,32 +17,34 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  std::ifstream in(input_file);
-  if (!in) {
-    std::cerr << "Error: failed to open input file for reading: " << input_file << std::endl;
+  std::string storage;
+  if (!lightex::utils::ReadDataFromFile(input_file, &storage)) {
     return 1;
   }
 
-  std::string storage;
-  in.unsetf(std::ios::skipws);  // Avoids white space skipping.
-  std::copy(std::istream_iterator<char>(in), std::istream_iterator<char>(), std::back_inserter(storage));
-  in.close();
-
+  lightex::WorkspaceId workspace_id = "1";
   std::string error_message;
+  if (!lightex::PreloadStyleFileIntoWorkspace(workspace_id, "lightex/styles/lightex.sty", &error_message)) {
+    std::cerr << "Error: failed to preload style file!" << std::endl;
+    std::cerr << error_message << std::endl;
+    return 1;
+  }
+
   std::string result;
-  if (!lightex::ParseProgramToHtml(storage, &error_message, &result)) {
+  if (!lightex::ParseProgramToHtml(storage, workspace_id, &error_message, &result)) {
     std::cerr << "Error: failed to parse input!" << std::endl;
     std::cerr << error_message << std::endl;
     return 1;
   }
 
-  std::ofstream out(output_file);
-  if (!out) {
-    std::cerr << "Error: failed to open output file for writing: " << input_file << std::endl;
-    return 1;
+  {
+    std::ofstream out(output_file);
+    if (!out) {
+      std::cerr << "Error: failed to open output file for writing: " << input_file << std::endl;
+      return 1;
+    }
+    out << result;
   }
-  out << result;
-  out.close();
 
   return 0;
 }
