@@ -20,308 +20,172 @@ digraph d {
   node_11 [label="PARAGRAPH_BREAKER"];
   node_10 -> node_11;
   node_12 [label="PARAGRAPH"];
-  node_13 [label="PLAIN_TEXT = <Найти вершины, через которые проходит нечётное число наибольших полупутей, и>"];
+  node_13 [label="PLAIN_TEXT = <Найти вершины, через которые проходит нечётное число наибольших полупутей, и
+удалить (правым удалением) ту из них, ключ которой наибольший.
+Если в дереве нет вершин, удовлетворяющих нужному свойству, то ничего
+удалять не требуется. Выполнить прямой (левый) обход полученного дерева.>"];
   node_12 -> node_13;
-  node_14 [label="PLAIN_TEXT = <
->"];
-  node_12 -> node_14;
-  node_15 [label="PLAIN_TEXT = <удалить (правым удалением) ту из них, ключ которой наибольший.>"];
-  node_12 -> node_15;
-  node_16 [label="PLAIN_TEXT = <
->"];
-  node_12 -> node_16;
-  node_17 [label="PLAIN_TEXT = <Если в дереве нет вершин, удовлетворяющих нужному свойству, то ничего>"];
-  node_12 -> node_17;
-  node_18 [label="PLAIN_TEXT = <
->"];
-  node_12 -> node_18;
-  node_19 [label="PLAIN_TEXT = <удалять не требуется. Выполнить прямой (левый) обход полученного дерева.>"];
-  node_12 -> node_19;
   node_10 -> node_12;
-  node_20 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_20;
-  node_21 [label="PARAGRAPH"];
-  node_22 [label="COMMAND = <name=InputFile>"];
+  node_14 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_14;
+  node_15 [label="PARAGRAPH"];
+  node_16 [label="COMMAND = <name=InputFile>"];
+  node_15 -> node_16;
+  node_10 -> node_15;
+  node_17 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_17;
+  node_18 [label="PARAGRAPH"];
+  node_19 [label="PLAIN_TEXT = <Входной файл содержит последовательность чисел >"];
+  node_18 -> node_19;
+  node_20 [label="UNESCAPED_COMMAND"];
+  node_21 [label="ARGUMENT"];
+  node_22 [label="PLAIN_TEXT = <&mdash;>"];
   node_21 -> node_22;
-  node_10 -> node_21;
-  node_23 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_23;
-  node_24 [label="PARAGRAPH"];
-  node_25 [label="PLAIN_TEXT = <Входной файл содержит последовательность чисел>"];
-  node_24 -> node_25;
-  node_26 [label="UNESCAPED_COMMAND"];
-  node_27 [label="ARGUMENT"];
-  node_28 [label="PLAIN_TEXT = <&mdash;>"];
-  node_27 -> node_28;
-  node_26 -> node_27;
-  node_24 -> node_26;
-  node_29 [label="PLAIN_TEXT = < ключи вершин в порядке добавления в дерево. Гарантируется, что в дереве не менее двух вершин.>"];
-  node_24 -> node_29;
+  node_20 -> node_21;
+  node_18 -> node_20;
+  node_23 [label="PLAIN_TEXT = < ключи вершин в порядке добавления в дерево. Гарантируется, что в дереве не менее двух вершин.>"];
+  node_18 -> node_23;
+  node_10 -> node_18;
+  node_24 [label="PARAGRAPH_BREAKER"];
   node_10 -> node_24;
+  node_25 [label="PARAGRAPH"];
+  node_26 [label="COMMAND = <name=OutputFile>"];
+  node_25 -> node_26;
+  node_10 -> node_25;
+  node_27 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_27;
+  node_28 [label="PARAGRAPH"];
+  node_29 [label="PLAIN_TEXT = <Выходной файл должен содержать последовательность ключей вершин, полученную прямым левым обходом итогового дерева.>"];
+  node_28 -> node_29;
+  node_10 -> node_28;
   node_30 [label="PARAGRAPH_BREAKER"];
   node_10 -> node_30;
   node_31 [label="PARAGRAPH"];
-  node_32 [label="COMMAND = <name=OutputFile>"];
+  node_32 [label="COMMAND = <name=Example>"];
   node_31 -> node_32;
   node_10 -> node_31;
   node_33 [label="PARAGRAPH_BREAKER"];
   node_10 -> node_33;
-  node_34 [label="PARAGRAPH"];
-  node_35 [label="PLAIN_TEXT = <Выходной файл должен содержать последовательность ключей вершин, полученную прямым левым обходом итогового дерева.>"];
+  node_34 [label="VERBATIM_ENVIRONMENT"];
+  node_35 [label="PROGRAM"];
+  node_36 [label="PARAGRAPH"];
+  node_37 [label="PLAIN_TEXT = <
+>"];
+  node_36 -> node_37;
+  node_38 [label="PLAIN_TEXT = <1
+2
+3
+4
+5>"];
+  node_36 -> node_38;
+  node_39 [label="PLAIN_TEXT = <
+>"];
+  node_36 -> node_39;
+  node_35 -> node_36;
   node_34 -> node_35;
   node_10 -> node_34;
-  node_36 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_36;
-  node_37 [label="PARAGRAPH"];
-  node_38 [label="COMMAND = <name=Example>"];
-  node_37 -> node_38;
-  node_10 -> node_37;
-  node_39 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_39;
-  node_40 [label="VERBATIM_ENVIRONMENT"];
-  node_41 [label="PROGRAM"];
-  node_42 [label="PARAGRAPH"];
-  node_43 [label="PLAIN_TEXT = <
+  node_40 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_40;
+  node_41 [label="ENVIRONMENT = <name=example end_name=example>"];
+  node_42 [label="PROGRAM"];
+  node_43 [label="PARAGRAPH"];
+  node_44 [label="PLAIN_TEXT = <
 >"];
-  node_42 -> node_43;
-  node_44 [label="PLAIN_TEXT = <1>"];
-  node_42 -> node_44;
-  node_45 [label="PLAIN_TEXT = <
->"];
-  node_42 -> node_45;
-  node_46 [label="PLAIN_TEXT = <2>"];
-  node_42 -> node_46;
+  node_43 -> node_44;
+  node_45 [label="COMMAND = <name=exmp>"];
+  node_46 [label="ARGUMENT"];
   node_47 [label="PLAIN_TEXT = <
 >"];
-  node_42 -> node_47;
-  node_48 [label="PLAIN_TEXT = <3>"];
-  node_42 -> node_48;
+  node_46 -> node_47;
+  node_48 [label="PLAIN_TEXT = <10
+5
+20
+4
+6
+15
+30
+3
+7
+14
+40
+8
+50
+9
+60>"];
+  node_46 -> node_48;
   node_49 [label="PLAIN_TEXT = <
 >"];
-  node_42 -> node_49;
-  node_50 [label="PLAIN_TEXT = <4>"];
-  node_42 -> node_50;
+  node_46 -> node_49;
+  node_45 -> node_46;
+  node_50 [label="ARGUMENT"];
   node_51 [label="PLAIN_TEXT = <
 >"];
-  node_42 -> node_51;
-  node_52 [label="PLAIN_TEXT = <5>"];
-  node_42 -> node_52;
+  node_50 -> node_51;
+  node_52 [label="PLAIN_TEXT = <10
+5
+4
+3
+6
+7
+8
+9
+20
+15
+14
+30
+40
+50>"];
+  node_50 -> node_52;
   node_53 [label="PLAIN_TEXT = <
 >"];
-  node_42 -> node_53;
+  node_50 -> node_53;
+  node_45 -> node_50;
+  node_43 -> node_45;
+  node_54 [label="PLAIN_TEXT = <
+>"];
+  node_43 -> node_54;
+  node_42 -> node_43;
   node_41 -> node_42;
-  node_40 -> node_41;
-  node_10 -> node_40;
-  node_54 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_54;
-  node_55 [label="ENVIRONMENT = <name=example end_name=example>"];
-  node_56 [label="PROGRAM"];
-  node_57 [label="PARAGRAPH"];
-  node_58 [label="PLAIN_TEXT = <
+  node_10 -> node_41;
+  node_55 [label="PARAGRAPH"];
+  node_56 [label="PLAIN_TEXT = <
 >"];
-  node_57 -> node_58;
-  node_59 [label="COMMAND = <name=exmp>"];
-  node_60 [label="ARGUMENT"];
-  node_61 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_61;
-  node_62 [label="PLAIN_TEXT = <10>"];
-  node_60 -> node_62;
-  node_63 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_63;
-  node_64 [label="PLAIN_TEXT = <5>"];
-  node_60 -> node_64;
-  node_65 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_65;
-  node_66 [label="PLAIN_TEXT = <20>"];
-  node_60 -> node_66;
-  node_67 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_67;
-  node_68 [label="PLAIN_TEXT = <4>"];
-  node_60 -> node_68;
-  node_69 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_69;
-  node_70 [label="PLAIN_TEXT = <6>"];
-  node_60 -> node_70;
-  node_71 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_71;
-  node_72 [label="PLAIN_TEXT = <15>"];
-  node_60 -> node_72;
-  node_73 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_73;
-  node_74 [label="PLAIN_TEXT = <30>"];
-  node_60 -> node_74;
-  node_75 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_75;
-  node_76 [label="PLAIN_TEXT = <3>"];
-  node_60 -> node_76;
-  node_77 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_77;
-  node_78 [label="PLAIN_TEXT = <7>"];
-  node_60 -> node_78;
-  node_79 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_79;
-  node_80 [label="PLAIN_TEXT = <14>"];
-  node_60 -> node_80;
-  node_81 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_81;
-  node_82 [label="PLAIN_TEXT = <40>"];
-  node_60 -> node_82;
-  node_83 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_83;
-  node_84 [label="PLAIN_TEXT = <8>"];
-  node_60 -> node_84;
-  node_85 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_85;
-  node_86 [label="PLAIN_TEXT = <50>"];
-  node_60 -> node_86;
-  node_87 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_87;
-  node_88 [label="PLAIN_TEXT = <9>"];
-  node_60 -> node_88;
-  node_89 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_89;
-  node_90 [label="PLAIN_TEXT = <60>"];
-  node_60 -> node_90;
-  node_91 [label="PLAIN_TEXT = <
->"];
-  node_60 -> node_91;
-  node_59 -> node_60;
-  node_92 [label="ARGUMENT"];
-  node_93 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_93;
-  node_94 [label="PLAIN_TEXT = <10>"];
-  node_92 -> node_94;
-  node_95 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_95;
-  node_96 [label="PLAIN_TEXT = <5>"];
-  node_92 -> node_96;
-  node_97 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_97;
-  node_98 [label="PLAIN_TEXT = <4>"];
-  node_92 -> node_98;
-  node_99 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_99;
-  node_100 [label="PLAIN_TEXT = <3>"];
-  node_92 -> node_100;
-  node_101 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_101;
-  node_102 [label="PLAIN_TEXT = <6>"];
-  node_92 -> node_102;
-  node_103 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_103;
-  node_104 [label="PLAIN_TEXT = <7>"];
-  node_92 -> node_104;
-  node_105 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_105;
-  node_106 [label="PLAIN_TEXT = <8>"];
-  node_92 -> node_106;
-  node_107 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_107;
-  node_108 [label="PLAIN_TEXT = <9>"];
-  node_92 -> node_108;
-  node_109 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_109;
-  node_110 [label="PLAIN_TEXT = <20>"];
-  node_92 -> node_110;
-  node_111 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_111;
-  node_112 [label="PLAIN_TEXT = <15>"];
-  node_92 -> node_112;
-  node_113 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_113;
-  node_114 [label="PLAIN_TEXT = <14>"];
-  node_92 -> node_114;
-  node_115 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_115;
-  node_116 [label="PLAIN_TEXT = <30>"];
-  node_92 -> node_116;
-  node_117 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_117;
-  node_118 [label="PLAIN_TEXT = <40>"];
-  node_92 -> node_118;
-  node_119 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_119;
-  node_120 [label="PLAIN_TEXT = <50>"];
-  node_92 -> node_120;
-  node_121 [label="PLAIN_TEXT = <
->"];
-  node_92 -> node_121;
-  node_59 -> node_92;
-  node_57 -> node_59;
-  node_122 [label="PLAIN_TEXT = <
->"];
-  node_57 -> node_122;
-  node_56 -> node_57;
   node_55 -> node_56;
   node_10 -> node_55;
-  node_123 [label="PARAGRAPH"];
-  node_124 [label="PLAIN_TEXT = <
+  node_57 [label="ENVIRONMENT = <name=center end_name=center>"];
+  node_58 [label="PROGRAM"];
+  node_59 [label="PARAGRAPH"];
+  node_60 [label="PLAIN_TEXT = <
 >"];
-  node_123 -> node_124;
-  node_10 -> node_123;
-  node_125 [label="ENVIRONMENT = <name=center end_name=center>"];
-  node_126 [label="PROGRAM"];
-  node_127 [label="PARAGRAPH"];
-  node_128 [label="PLAIN_TEXT = <
+  node_59 -> node_60;
+  node_61 [label="PLAIN_TEXT = <    >"];
+  node_59 -> node_61;
+  node_62 [label="COMMAND = <name=includegraphics>"];
+  node_63 [label="ARGUMENT"];
+  node_64 [label="PLAIN_TEXT = <tst01-1.GIF>"];
+  node_63 -> node_64;
+  node_62 -> node_63;
+  node_59 -> node_62;
+  node_65 [label="PLAIN_TEXT = <
 >"];
-  node_127 -> node_128;
-  node_129 [label="PLAIN_TEXT = <    >"];
-  node_127 -> node_129;
-  node_130 [label="COMMAND = <name=includegraphics>"];
-  node_131 [label="ARGUMENT"];
-  node_132 [label="PLAIN_TEXT = <tst01-1.GIF>"];
-  node_131 -> node_132;
-  node_130 -> node_131;
-  node_127 -> node_130;
-  node_133 [label="PLAIN_TEXT = <
->"];
-  node_127 -> node_133;
-  node_126 -> node_127;
-  node_125 -> node_126;
-  node_10 -> node_125;
-  node_134 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_134;
+  node_59 -> node_65;
+  node_58 -> node_59;
+  node_57 -> node_58;
+  node_10 -> node_57;
+  node_66 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_66;
   node_5 -> node_10;
   node_2 -> node_5;
-  node_135 [label="PARAGRAPH"];
-  node_136 [label="PLAIN_TEXT = <
+  node_67 [label="PARAGRAPH"];
+  node_68 [label="PLAIN_TEXT = <
 >"];
-  node_135 -> node_136;
-  node_2 -> node_135;
+  node_67 -> node_68;
+  node_2 -> node_67;
   node_1 -> node_2;
   node_0 -> node_1;
-  node_137 [label="PARAGRAPH"];
-  node_138 [label="PLAIN_TEXT = <
+  node_69 [label="PARAGRAPH"];
+  node_70 [label="PLAIN_TEXT = <
 >"];
-  node_137 -> node_138;
-  node_0 -> node_137;
+  node_69 -> node_70;
+  node_0 -> node_69;
 }

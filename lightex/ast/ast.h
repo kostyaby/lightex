@@ -27,6 +27,7 @@ struct CommandMacro;
 struct EnvironmentMacro;
 struct Command;
 struct UnescapedCommand;
+struct NparagraphCommand;
 struct Environment;
 struct VerbatimEnvironment;
 
@@ -46,7 +47,8 @@ struct ProgramNode : x3::variant<x3::forward_ast<ParagraphBreaker>,
 struct ParagraphNode : x3::variant<x3::forward_ast<PlainText>,
                                    x3::forward_ast<InlinedMathText>,
                                    x3::forward_ast<Command>,
-                                   x3::forward_ast<UnescapedCommand>> {
+                                   x3::forward_ast<UnescapedCommand>,
+                                   x3::forward_ast<NparagraphCommand>> {
   using base_type::base_type;
   using base_type::operator=;
 };
@@ -55,6 +57,7 @@ struct ArgumentNode : x3::variant<x3::forward_ast<PlainText>,
                                   x3::forward_ast<InlinedMathText>,
                                   x3::forward_ast<Command>,
                                   x3::forward_ast<UnescapedCommand>,
+                                  x3::forward_ast<NparagraphCommand>,
                                   x3::forward_ast<ArgumentRef>,
                                   x3::forward_ast<OuterArgumentRef>> {
   using base_type::base_type;
@@ -117,6 +120,10 @@ struct Command : x3::position_tagged {
 };
 
 struct UnescapedCommand : x3::position_tagged {
+  Argument body;
+};
+
+struct NparagraphCommand : x3::position_tagged {
   Argument body;
 };
 

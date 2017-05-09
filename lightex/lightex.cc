@@ -55,7 +55,7 @@ bool ParseProgramToAst(const std::string& input, std::string* error_message, ast
   return true;
 }
 
-bool GeneralParseProgramToHtml(const std::string& input, const WorkspaceId& workspace_id, std::string* error_message, std::string* output) {
+bool GeneralParseProgramToHtml(const std::string& input, const WorkspaceId& workspace_id, bool preload, std::string* error_message, std::string* output) {
   ast::Program ast;
   if (!ParseProgramToAst(input, error_message, &ast)) {
     return false;
@@ -70,8 +70,10 @@ bool GeneralParseProgramToHtml(const std::string& input, const WorkspaceId& work
   }
 
   html_converter::HtmlVisitor visitor_copy = workspace_ptr->visitor;
-  html_converter::Result result = workspace_ptr->visitor(ast);
-  workspace_ptr->visitor = visitor_copy;
+  html_converter::Result result = visitor_copy(ast);
+  if (preload) {
+    workspace_ptr->visitor = visitor_copy;
+  }
   if (!result.is_successful) {
     if (error_message) {
       *error_message = result.error_message;
@@ -110,7 +112,7 @@ bool PreloadStyleFileIntoWorkspace(const WorkspaceId& workspace_id, const std::s
     return false;
   }
 
-  return GeneralParseProgramToHtml(storage, workspace_id, error_message, nullptr);
+  return GeneralParseProgramToHtml(storage, workspace_id, true, error_message, nullptr);
 }
 
 bool ParseProgramToHtml(const std::string& input, const WorkspaceId& workspace_id, std::string* error_message, std::string* output) {
@@ -118,7 +120,7 @@ bool ParseProgramToHtml(const std::string& input, const WorkspaceId& workspace_i
     return false;
   }
 
-  return GeneralParseProgramToHtml(input, workspace_id, error_message, output);
+  return GeneralParseProgramToHtml(input, workspace_id, false, error_message, output);
 }
 
 }  // namespace lightex

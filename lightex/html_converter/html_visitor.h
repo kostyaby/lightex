@@ -17,8 +17,10 @@ struct Result {
   std::string unescaped;
   std::string error_message;
 
+  bool breaks_paragraph;
+
   static Result Failure(const std::string& error_message);
-  static Result Success(const std::string& escaped, const std::string& unescaped);
+  static Result Success(const std::string& escaped, const std::string& unescaped, bool breaks_paragraph = false);
 };
 
 class HtmlVisitor : public boost::static_visitor<Result> {
@@ -38,6 +40,7 @@ class HtmlVisitor : public boost::static_visitor<Result> {
   Result operator()(const ast::EnvironmentMacro& environment_macro);
   Result operator()(const ast::Command& command);
   Result operator()(const ast::UnescapedCommand& unescaped_command);
+  Result operator()(const ast::NparagraphCommand& nparagraph_command);
   Result operator()(const ast::Environment& environment);
   Result operator()(const ast::VerbatimEnvironment& verbatim_environment);
 

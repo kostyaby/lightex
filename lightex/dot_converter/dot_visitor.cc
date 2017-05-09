@@ -171,6 +171,17 @@ NodeId DotVisitor::operator()(const ast::UnescapedCommand& unescaped_command) {
   return node_id;
 }
 
+NodeId DotVisitor::operator()(const ast::NparagraphCommand& nparagraph_command) {
+  NodeId node_id = GenerateNodeId();
+  AppendToOutput("  " + node_id + " [label=\"NPARAGRAPH_COMMAND\"];\n");
+
+  NodeId child_id = (*this)(nparagraph_command.body);
+  AppendToOutput("  " + node_id + " -> " + child_id + ";\n");
+
+  return node_id;
+}
+
+
 NodeId DotVisitor::operator()(const ast::Environment& environment) {
   NodeId node_id = GenerateNodeId();
   AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <name=" + environment.name);

@@ -107,11 +107,11 @@ const MacroDefinition* GetMacroDefinition(const std::list<MacroDefinition>& macr
 }  // namespace
 
 Result Result::Failure(const std::string& error_message) {
-  return {false, "", "", error_message};
+  return {false, "", "", error_message, false};
 }
 
-Result Result::Success(const std::string& escaped, const std::string& unescaped) {
-  return {true, escaped, unescaped, ""};
+Result Result::Success(const std::string& escaped, const std::string& unescaped, bool breaks_paragraph) {
+  return {true, escaped, unescaped, "", breaks_paragraph};
 }
 
 Result HtmlVisitor::operator()(const ast::Program& program) {
@@ -128,7 +128,7 @@ Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {
     return result;
   }
 
-  if (active_environment_definitions_num_ == 0) {
+  if (active_environment_definitions_num_ == 0 && !result.breaks_paragraph) {
     result.escaped = "<p>" + result.escaped + "</p>";
     result.unescaped = "<p>" + result.unescaped + "</p>";
   }
@@ -219,6 +219,13 @@ Result HtmlVisitor::operator()(const ast::UnescapedCommand& unescaped_command) {
   return result;
 }
 
+Result HtmlVisitor::operator()(const ast::NparagraphCommand& nparagraph_command) {
+  Result result = (*this)(nparagraph_command.body);
+
+  result.breaks_paragraph = true;
+  return result;
+}
+
 Result HtmlVisitor::operator()(const ast::Environment& environment) {
   if (environment.name != environment.end_name) {
     return Result::Failure("Environment name doesn't match the end name: " + environment.name + " != " +
@@ -250,6 +257,7 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
 
   std::string escaped;
   std::string unescaped;
+  bool breaks_paragraph;
 
   active_environment_definitions_num_ += 1;
   intermediate_result = (*this)(environment_macro_ptr->pre_program);
@@ -266,6 +274,7 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
   if (intermediate_result.is_successful) {
     escaped += intermediate_result.escaped;
     unescaped += intermediate_result.unescaped;
+    breaks_paragraph = intermediate_result.breaks_paragraph;
   } else {
     rollback();
     return intermediate_result;
@@ -283,7 +292,7 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
   }
 
   rollback();
-  return Result::Success(escaped, unescaped);
+  return Result::Success(escaped, unescaped, breaks_paragraph);
 }
 
 Result HtmlVisitor::operator()(const ast::VerbatimEnvironment& verbatim_environment) {
@@ -302,6 +311,7 @@ Result HtmlVisitor::JoinNodeResults(const std::list<Node>& nodes) {
   std::ostringstream escaped;
   std::ostringstream unescaped;
 
+  bool breaks_paragraph = false;
   for (const auto& node : nodes) {
     Result child_result = boost::apply_visitor(*this, node);
     if (!child_result.is_successful) {
@@ -310,9 +320,10 @@ Result HtmlVisitor::JoinNodeResults(const std::list<Node>& nodes) {
 
     escaped << child_result.escaped;
     unescaped << child_result.unescaped;
+    breaks_paragraph |= child_result.breaks_paragraph;
   }
 
-  return Result::Success(escaped.str(), unescaped.str());
+  return Result::Success(escaped.str(), unescaped.str(), breaks_paragraph);
 };
 
 template <typename Macro, typename MacroDefinition>
@@ -374,15 +385,6 @@ const ast::EnvironmentMacro* HtmlVisitor::GetDefinedEnvironmentMacro(const std::
 }
 
 const Result* HtmlVisitor::GetArgumentByReference(int index, bool is_outer) const {
-  // std::cerr << "Index = " << index << ", is_outer = " << is_outer << "\n";
-  // for (int i = 0; i < arguments_stack_.size(); ++i) {
-  //   std::cerr << i << " --> ";
-  //   for (int j = 0; j < arguments_stack_[i].size(); ++j) {
-  //     std::cerr << arguments_stack_[i][j] << " ";
-  //   }
-  //   std::cerr << "\n";
-  // }
-
   int arguments_stack_index = static_cast<int>(arguments_stack_.size()) - (is_outer ? 2 : 1);
   if (index < 0 || arguments_stack_index < 0) {
     return nullptr;

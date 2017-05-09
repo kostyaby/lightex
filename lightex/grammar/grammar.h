@@ -29,29 +29,30 @@ x3::rule<class CommandMacroId, ast::CommandMacro> command_macro = "command_macro
 x3::rule<class EnvironmentMacroId, ast::EnvironmentMacro> environment_macro = "environment_macro";
 x3::rule<class CommandId, ast::Command> command = "command";
 x3::rule<class UnescapedCommandId, ast::UnescapedCommand> unescaped_command = "unescaped_command";
+x3::rule<class NparagraphCommandId, ast::NparagraphCommand> nparagraph_command = "nparagraph_command";
 x3::rule<class EnvironmentId, ast::Environment> environment = "environment";
 x3::rule<class VerbatimEnvironmentId, ast::VerbatimEnvironment> verbatim_environment = "verbatim_environment";
 
 const auto special_symbol = x3::char_("\\{}$&#^_%~[]");
 const auto control_symbol = x3::lexeme['\\' >> special_symbol];
 const auto unicode_symbol = x3::lexeme[x3::char_('&') >> +x3::alpha >> x3::char_(';')];
-const auto special_command_identifier = x3::lit("begin") | "end" | "newcommand" | "newenvironment" | "unescaped";
+const auto special_command_identifier = x3::lit("begin") | "end" | "newcommand" | "newenvironment" | "unescaped" | "nparagraph";
 const auto command_identifier = x3::lexeme['\\' >> (+x3::alpha - special_command_identifier)];
 const auto math_text_symbol = (x3::char_ - x3::char_('$'));
-const auto verbatim_environment_symbol = (x3::char_ - x3::char_('\\'));
 const auto environment_identifier = x3::lexeme[+x3::alpha] - "verbatim";
+const auto plain_text_symbol = control_symbol | (x3::char_ - special_symbol - x3::lit('\n'));
 
 const auto program_node_def = paragraph_breaker | paragraph | math_text | environment | verbatim_environment |
                               command_macro | environment_macro | argument_ref | outer_argument_ref;
 
 const auto plain_text_def =
-    x3::no_skip[unicode_symbol | (+(control_symbol | (x3::char_ - special_symbol - x3::lit('\n')))) | x3::string("\n")];
+    x3::no_skip[unicode_symbol | x3::string("\n") | (+(-x3::char_('\n') >> plain_text_symbol))];
 
 const auto paragraph_node_def = &(!x3::omit[paragraph_breaker]) >>
-                                (plain_text | inlined_math_text | command | unescaped_command);
+                                (plain_text | inlined_math_text | command | unescaped_command | nparagraph_command);
 
 const auto argument_node_def =
-    plain_text | inlined_math_text | command | unescaped_command | argument_ref | outer_argument_ref;
+    plain_text | inlined_math_text | command | unescaped_command | nparagraph_command | argument_ref | outer_argument_ref;
 
 const auto program_def = *program_node;
 
@@ -80,6 +81,8 @@ const auto command_def = command_identifier >> *('[' >> argument >> ']') >> *('{
 
 const auto unescaped_command_def = x3::lit("\\unescaped") >> '{' >> argument >> '}';
 
+const auto nparagraph_command_def = x3::lit("\\nparagraph") >> '{' >> argument >> '}';
+
 const auto environment_def = x3::lit("\\begin") >> '{' >> environment_identifier >> '}' >> *('[' >> argument >> ']') >>
                              *('{' >> argument >> '}') >> program >> "\\end" >> '{' >> environment_identifier >> '}';
 
@@ -103,6 +106,7 @@ BOOST_SPIRIT_DEFINE(command_macro)
 BOOST_SPIRIT_DEFINE(environment_macro)
 BOOST_SPIRIT_DEFINE(command)
 BOOST_SPIRIT_DEFINE(unescaped_command)
+BOOST_SPIRIT_DEFINE(nparagraph_command)
 BOOST_SPIRIT_DEFINE(environment)
 BOOST_SPIRIT_DEFINE(verbatim_environment)
 
