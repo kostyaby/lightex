@@ -71,11 +71,11 @@ bool GeneralParseProgramToHtml(const std::string& input, const WorkspaceId& work
 
   html_converter::HtmlVisitor visitor_copy = workspace_ptr->visitor;
   html_converter::Result result = workspace_ptr->visitor(ast);
+  workspace_ptr->visitor = visitor_copy;
   if (!result.is_successful) {
     if (error_message) {
       *error_message = result.error_message;
     }
-    workspace_ptr->visitor = visitor_copy;
     return false;
   }
 
