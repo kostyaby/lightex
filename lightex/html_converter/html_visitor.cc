@@ -1,5 +1,6 @@
 #include <lightex/html_converter/html_visitor.h>
 
+#include <cctype>
 #include <list>
 #include <iomanip>
 #include <iostream>
