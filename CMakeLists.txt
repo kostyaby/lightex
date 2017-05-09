@@ -29,9 +29,9 @@ set(lightex_src_files ${lightex_src_files}
 add_library(lightex STATIC ${lightex_src_files})
 
 # Find Boost
-find_package(Boost 1.64 REQUIRED)
+set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost 1.64 REQUIRED COMPONENTS unit_test_framework)
 include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIR})
 
 # Define LighTeX binaries
 add_executable(parse_program_to_dot ${lightex_root}/lightex/binaries/parse_program_to_dot.cc)
@@ -39,3 +39,7 @@ target_link_libraries(parse_program_to_dot lightex)
 
 add_executable(parse_program_to_html ${lightex_root}/lightex/binaries/parse_program_to_html.cc)
 target_link_libraries(parse_program_to_html lightex)
+
+# Unittest
+add_executable(tester ${lightex_root}/tests/main.cc)
+target_link_libraries(tester lightex ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
