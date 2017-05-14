@@ -47,14 +47,16 @@ const auto comment = x3::omit[x3::no_skip[x3::lit('%') >> *(x3::char_ - '\n') >>
 const auto program_node_def = paragraph_breaker | paragraph | math_text | environment | verbatim_environment |
                               command_macro | environment_macro | argument_ref | outer_argument_ref | comment;
 
-const auto plain_text_def = x3::no_skip[unicode_symbol | x3::string("\n") | (+(-x3::char_('\n') >> plain_text_symbol))];
+const auto plain_text_def =
+    x3::no_skip[unicode_symbol | x3::string("\n") |
+                (+(-x3::char_('\n') >> plain_text_symbol) >> -(&(!paragraph_breaker) >> x3::char_('\n')))];
 
-const auto paragraph_node_def = &(!x3::omit[paragraph_breaker]) >>
+const auto paragraph_node_def = &(!paragraph_breaker) >>
                                 (plain_text | inlined_math_text | command | unescaped_command | nparagraph_command |
                                  comment);
 
-const auto argument_node_def = plain_text | inlined_math_text | command | unescaped_command | nparagraph_command |
-                               argument_ref | outer_argument_ref | comment;
+const auto argument_node_def = comment | plain_text | inlined_math_text | command | unescaped_command | nparagraph_command |
+                               argument_ref | outer_argument_ref;
 
 const auto program_def = *program_node;
 
