@@ -128,6 +128,12 @@ Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {
     return result;
   }
 
+  result.escaped = FormatText(result.escaped);
+  if (result.escaped.empty() || result.escaped == " ") {
+    result.escaped = "";
+    return result;
+  }
+
   if (active_environment_definitions_num_ == 0 && !result.breaks_paragraph) {
     result.escaped = "<p>" + result.escaped + "</p>";
     result.unescaped = "<p>" + result.unescaped + "</p>";
