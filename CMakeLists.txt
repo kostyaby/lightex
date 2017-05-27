@@ -19,8 +19,6 @@ set(lightex_src_files ${lightex_src_files}
     ${lightex_root}/lightex/dot_converter/dot_visitor.cc
     ${lightex_root}/lightex/dot_converter/dot_visitor.h
     ${lightex_root}/lightex/grammar/grammar.h
-    ${lightex_root}/lightex/html_converter/html_preprocessor.cc
-    ${lightex_root}/lightex/html_converter/html_preprocessor.h
     ${lightex_root}/lightex/html_converter/html_visitor.cc
     ${lightex_root}/lightex/html_converter/html_visitor.h
     ${lightex_root}/lightex/utils/file_utils.cc

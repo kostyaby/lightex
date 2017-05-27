@@ -5,7 +5,6 @@
 
 #include <lightex/ast/ast.h>
 #include <lightex/dot_converter/dot_visitor.h>
-#include <lightex/html_converter/html_preprocessor.h>
 #include <lightex/html_converter/html_visitor.h>
 #include <lightex/grammar/grammar.h>
 #include <lightex/utils/file_utils.h>
@@ -25,17 +24,15 @@ bool ParseProgramToAst(const std::string& input, std::string* error_message, ast
     return false;
   }
 
-  std::string preprocessed_input = html_converter::PreprocessHtmlInput(input);
-
-  std::string::const_iterator start = preprocessed_input.begin();
+  std::string::const_iterator start = input.begin();
   std::string::const_iterator iter = start;
-  std::string::const_iterator end = preprocessed_input.end();
+  std::string::const_iterator end = input.end();
   if (!x3::phrase_parse(iter, end, grammar::program, x3::space, *output) || iter < end) {
     if (error_message) {
       std::size_t failed_at = iter - start;
       *error_message = kSyntaxParsingError;
-      *error_message = preprocessed_input.substr(failed_at, failed_at + kFailedSnippetLength);
-      if (failed_at + kFailedSnippetLength + 1 < preprocessed_input.size()) {
+      *error_message = input.substr(failed_at, failed_at + kFailedSnippetLength);
+      if (failed_at + kFailedSnippetLength + 1 < input.size()) {
         *error_message += "...";
       }
     }

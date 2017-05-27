@@ -20,175 +20,378 @@ digraph d {
   node_11 [label="PARAGRAPH_BREAKER"];
   node_10 -> node_11;
   node_12 [label="PARAGRAPH"];
-  node_13 [label="PLAIN_TEXT = <Найти вершины, через которые проходит нечётное число наибольших полупутей, и
-удалить (правым удалением) ту из них, ключ которой наибольший.>"];
+  node_13 [label="PLAIN_TEXT = <Литорея>"];
   node_12 -> node_13;
+  node_14 [label="PLAIN_TEXT = <~>"];
+  node_12 -> node_14;
+  node_15 [label="PLAIN_TEXT = <--->"];
+  node_12 -> node_15;
+  node_16 [label="PLAIN_TEXT = < это система тайнописи, применявшаяся в древнерусских текстах.
+Известно несколько разновидностей литореи, и мы рассмотрим одну из них
+применительно к текстам из латинских букв.>"];
+  node_12 -> node_16;
   node_10 -> node_12;
-  node_14 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_14;
-  node_15 [label="PARAGRAPH"];
-  node_16 [label="PLAIN_TEXT = <Если в дереве нет вершин, удовлетворяющих нужному свойству, то ничего
-удалять не требуется. Выполнить прямой (левый) обход полученного дерева.>"];
-  node_15 -> node_16;
-  node_10 -> node_15;
   node_17 [label="PARAGRAPH_BREAKER"];
   node_10 -> node_17;
   node_18 [label="PARAGRAPH"];
-  node_19 [label="COMMAND = <name=InputFile>"];
+  node_19 [label="PLAIN_TEXT = <Текст шифруется с помощью ключа, представляющего собой слово небольшой длины
+из строчных латинских букв.
+В>"];
   node_18 -> node_19;
+  node_20 [label="PLAIN_TEXT = <~>"];
+  node_18 -> node_20;
+  node_21 [label="PLAIN_TEXT = <шифруемом тексте заменяются только латинские
+буквы, остальные символы остаются неизменными. Латинские буквы разделяются на
+блоки так, что длина всех блоков (кроме, может быть, последнего) равна длине
+ключа.
+Пусть >"];
+  node_18 -> node_21;
+  node_22 [label="INLINED_MATH_TEXT = <a_1>"];
+  node_18 -> node_22;
+  node_23 [label="PLAIN_TEXT = <~>"];
+  node_18 -> node_23;
+  node_24 [label="PLAIN_TEXT = <--->"];
+  node_18 -> node_24;
+  node_25 [label="PLAIN_TEXT = < номер первой буквы блока в латинском алфавите, >"];
+  node_18 -> node_25;
+  node_26 [label="INLINED_MATH_TEXT = <b_1>"];
+  node_18 -> node_26;
+  node_27 [label="PLAIN_TEXT = <~>"];
+  node_18 -> node_27;
+  node_28 [label="PLAIN_TEXT = <--->"];
+  node_18 -> node_28;
+  node_29 [label="PLAIN_TEXT = < номер
+первой буквы ключа.
+Тогда первая буква блока заменяется буквой, чей номер
+в алфавите равен >"];
+  node_18 -> node_29;
+  node_30 [label="INLINED_MATH_TEXT = <a_1 + b_1>"];
+  node_18 -> node_30;
+  node_31 [label="PLAIN_TEXT = < (если >"];
+  node_18 -> node_31;
+  node_32 [label="INLINED_MATH_TEXT = <a_1 + b_1 > 26>"];
+  node_18 -> node_32;
+  node_33 [label="PLAIN_TEXT = <, то берется величина >"];
+  node_18 -> node_33;
+  node_34 [label="INLINED_MATH_TEXT = <a_1 + b_1 - 26>"];
+  node_18 -> node_34;
+  node_35 [label="PLAIN_TEXT = <).
+При этом прописная буква заменяется на прописную, а строчная>"];
+  node_18 -> node_35;
+  node_36 [label="PLAIN_TEXT = <~>"];
+  node_18 -> node_36;
+  node_37 [label="PLAIN_TEXT = <--->"];
+  node_18 -> node_37;
+  node_38 [label="PLAIN_TEXT = < на строчную.
+Вторая и последующие буквы блоков шифруются с помощью соответствующих букв
+ключа аналогичным образом.>"];
+  node_18 -> node_38;
   node_10 -> node_18;
-  node_20 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_20;
-  node_21 [label="PARAGRAPH"];
-  node_22 [label="PLAIN_TEXT = <Входной файл содержит последовательность чисел>"];
-  node_21 -> node_22;
-  node_23 [label="UNESCAPED_COMMAND"];
-  node_24 [label="ARGUMENT"];
-  node_25 [label="PLAIN_TEXT = <&nbsp;>"];
-  node_24 -> node_25;
-  node_23 -> node_24;
-  node_21 -> node_23;
-  node_26 [label="UNESCAPED_COMMAND"];
-  node_27 [label="ARGUMENT"];
-  node_28 [label="PLAIN_TEXT = <&mdash;>"];
-  node_27 -> node_28;
-  node_26 -> node_27;
-  node_21 -> node_26;
-  node_29 [label="PLAIN_TEXT = < ключи вершин в порядке добавления в дерево. Гарантируется, что в дереве не менее двух вершин.>"];
-  node_21 -> node_29;
-  node_10 -> node_21;
-  node_30 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_30;
-  node_31 [label="PARAGRAPH"];
-  node_32 [label="COMMAND = <name=OutputFile>"];
-  node_31 -> node_32;
-  node_10 -> node_31;
-  node_33 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_33;
-  node_34 [label="PARAGRAPH"];
-  node_35 [label="PLAIN_TEXT = <Выходной файл должен содержать последовательность ключей вершин, полученную прямым левым обходом итогового дерева.>"];
-  node_34 -> node_35;
-  node_10 -> node_34;
-  node_36 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_36;
-  node_37 [label="PARAGRAPH"];
-  node_38 [label="COMMAND = <name=Example>"];
-  node_37 -> node_38;
-  node_10 -> node_37;
   node_39 [label="PARAGRAPH_BREAKER"];
   node_10 -> node_39;
   node_40 [label="PARAGRAPH"];
-  node_41 [label="PLAIN_TEXT = <>"];
+  node_41 [label="PLAIN_TEXT = <Пусть шифруемое слово>"];
   node_40 -> node_41;
-  node_42 [label="PLAIN_TEXT = <% this is not a comment>"];
+  node_42 [label="PLAIN_TEXT = <~>"];
   node_40 -> node_42;
-  node_10 -> node_40;
-  node_43 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_43;
-  node_44 [label="VERBATIM_ENVIRONMENT" content="
-1
-2 % Comments are visible in verbatim
-3
-4
-5
-"];
-  node_10 -> node_44;
-  node_45 [label="PARAGRAPH_BREAKER"];
-  node_10 -> node_45;
-  node_46 [label="ENVIRONMENT = <name=example end_name=example>"];
-  node_47 [label="PROGRAM"];
-  node_48 [label="PARAGRAPH"];
-  node_49 [label="PLAIN_TEXT = <>"];
-  node_48 -> node_49;
-  node_50 [label="COMMAND = <name=exmp>"];
-  node_51 [label="ARGUMENT"];
-  node_52 [label="PLAIN_TEXT = <>"];
-  node_51 -> node_52;
-  node_53 [label="PLAIN_TEXT = <10
-5
-20
-4
-6
-15
-30
-3
-7
-14
-40
-8
-50
-9
-60
->"];
-  node_51 -> node_53;
-  node_50 -> node_51;
-  node_54 [label="ARGUMENT"];
-  node_55 [label="PLAIN_TEXT = <>"];
-  node_54 -> node_55;
-  node_56 [label="PLAIN_TEXT = <10
-5
-4
-3
-6
-7
-8
-9
-20
-15
-14
-30
-40
-50
->"];
-  node_54 -> node_56;
-  node_50 -> node_54;
-  node_48 -> node_50;
-  node_57 [label="PLAIN_TEXT = <>"];
-  node_48 -> node_57;
-  node_47 -> node_48;
+  node_43 [label="PLAIN_TEXT = <--->"];
+  node_40 -> node_43;
+  node_44 [label="PLAIN_TEXT = < >"];
+  node_40 -> node_44;
+  node_45 [label="COMMAND = <name=texttt>"];
+  node_46 [label="ARGUMENT"];
+  node_47 [label="PLAIN_TEXT = <crusader>"];
   node_46 -> node_47;
-  node_10 -> node_46;
-  node_58 [label="PARAGRAPH"];
-  node_59 [label="PLAIN_TEXT = <>"];
-  node_58 -> node_59;
-  node_10 -> node_58;
-  node_60 [label="ENVIRONMENT = <name=center end_name=center>"];
-  node_61 [label="PROGRAM"];
-  node_62 [label="PARAGRAPH"];
-  node_63 [label="PLAIN_TEXT = <>"];
-  node_62 -> node_63;
-  node_64 [label="PLAIN_TEXT = <    >"];
-  node_62 -> node_64;
-  node_65 [label="COMMAND = <name=includegraphics>"];
-  node_66 [label="ARGUMENT"];
-  node_67 [label="PLAIN_TEXT = <tst01-1.GIF>"];
-  node_66 -> node_67;
-  node_65 -> node_66;
-  node_62 -> node_65;
-  node_68 [label="PLAIN_TEXT = <>"];
-  node_62 -> node_68;
-  node_61 -> node_62;
-  node_60 -> node_61;
-  node_10 -> node_60;
-  node_69 [label="PARAGRAPH"];
-  node_70 [label="PLAIN_TEXT = <>"];
+  node_45 -> node_46;
+  node_40 -> node_45;
+  node_48 [label="PLAIN_TEXT = <, а ключом является слово>"];
+  node_40 -> node_48;
+  node_49 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_49;
+  node_50 [label="COMMAND = <name=texttt>"];
+  node_51 [label="ARGUMENT"];
+  node_52 [label="PLAIN_TEXT = <bow>"];
+  node_51 -> node_52;
+  node_50 -> node_51;
+  node_40 -> node_50;
+  node_53 [label="PLAIN_TEXT = <.
+Тогда первая буква заменяется буквой>"];
+  node_40 -> node_53;
+  node_54 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_54;
+  node_55 [label="COMMAND = <name=texttt>"];
+  node_56 [label="ARGUMENT"];
+  node_57 [label="PLAIN_TEXT = <e>"];
+  node_56 -> node_57;
+  node_55 -> node_56;
+  node_40 -> node_55;
+  node_58 [label="PLAIN_TEXT = <
+>"];
+  node_40 -> node_58;
+  node_59 [label="PLAIN_TEXT = <(номер первой буквы в латинском алфавите>"];
+  node_40 -> node_59;
+  node_60 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_60;
+  node_61 [label="PLAIN_TEXT = <--->"];
+  node_40 -> node_61;
+  node_62 [label="PLAIN_TEXT = < 3, а
+номер первой буквы ключа>"];
+  node_40 -> node_62;
+  node_63 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_63;
+  node_64 [label="PLAIN_TEXT = <--->"];
+  node_40 -> node_64;
+  node_65 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_65;
+  node_66 [label="PLAIN_TEXT = <2; следовательно, она заменяется на букву>"];
+  node_40 -> node_66;
+  node_67 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_67;
+  node_68 [label="COMMAND = <name=texttt>"];
+  node_69 [label="ARGUMENT"];
+  node_70 [label="PLAIN_TEXT = <c>"];
   node_69 -> node_70;
+  node_68 -> node_69;
+  node_40 -> node_68;
   node_71 [label="PLAIN_TEXT = <
 >"];
-  node_69 -> node_71;
-  node_10 -> node_69;
+  node_40 -> node_71;
+  node_72 [label="PLAIN_TEXT = <номером>"];
+  node_40 -> node_72;
+  node_73 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_73;
+  node_74 [label="PLAIN_TEXT = <5).
+Аналогично, вторая буква заменяется буквой>"];
+  node_40 -> node_74;
+  node_75 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_75;
+  node_76 [label="COMMAND = <name=texttt>"];
+  node_77 [label="ARGUMENT"];
+  node_78 [label="PLAIN_TEXT = <g>"];
+  node_77 -> node_78;
+  node_76 -> node_77;
+  node_40 -> node_76;
+  node_79 [label="PLAIN_TEXT = < (>"];
+  node_40 -> node_79;
+  node_80 [label="INLINED_MATH_TEXT = <18 + 15 = 33>"];
+  node_40 -> node_80;
+  node_81 [label="PLAIN_TEXT = <,
+>"];
+  node_40 -> node_81;
+  node_82 [label="INLINED_MATH_TEXT = <33 - 26 = 7>"];
+  node_40 -> node_82;
+  node_83 [label="PLAIN_TEXT = <). Зашифрованный текст, таким образом, выглядит как >"];
+  node_40 -> node_83;
+  node_84 [label="COMMAND = <name=texttt>"];
+  node_85 [label="ARGUMENT"];
+  node_86 [label="PLAIN_TEXT = <egrupagg>"];
+  node_85 -> node_86;
+  node_84 -> node_85;
+  node_40 -> node_84;
+  node_87 [label="PLAIN_TEXT = <.
+Обратите внимание на то, что в этом примере одинаковые буквы заменяются
+одинаковыми, однако это случайное совпадение>"];
+  node_40 -> node_87;
+  node_88 [label="PLAIN_TEXT = <~>"];
+  node_40 -> node_88;
+  node_89 [label="PLAIN_TEXT = <--->"];
+  node_40 -> node_89;
+  node_90 [label="PLAIN_TEXT = < если расстояние между
+одинаковыми буквами не кратно длине ключа, такого не произойдет!>"];
+  node_40 -> node_90;
+  node_10 -> node_40;
+  node_91 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_91;
+  node_92 [label="PARAGRAPH"];
+  node_93 [label="PLAIN_TEXT = <В>"];
+  node_92 -> node_93;
+  node_94 [label="PLAIN_TEXT = <~>"];
+  node_92 -> node_94;
+  node_95 [label="PLAIN_TEXT = <ваше распоряжение попали два фрагмента текста, являющихся частью большого
+послания>"];
+  node_92 -> node_95;
+  node_96 [label="PLAIN_TEXT = <~>"];
+  node_92 -> node_96;
+  node_97 [label="PLAIN_TEXT = <--->"];
+  node_92 -> node_97;
+  node_98 [label="PLAIN_TEXT = < незашифрованный и зашифрованный с помощью литореи. Длины этих
+фрагментов совпадают, и известно, что первый символ зашифрованного текста
+соответствует первому символу незашифрованного. Однако начало фрагментов не
+обязательно совпадает с началом послания! Известно также, что длина каждого
+фрагмента не меньше длины ключа.>"];
+  node_92 -> node_98;
+  node_10 -> node_92;
+  node_99 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_99;
+  node_100 [label="PARAGRAPH"];
+  node_101 [label="PLAIN_TEXT = <Определите ключ литореи, имеющий минимальную длину, на основании имеющихся
+данных!>"];
+  node_100 -> node_101;
+  node_10 -> node_100;
+  node_102 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_102;
+  node_103 [label="PARAGRAPH"];
+  node_104 [label="COMMAND = <name=InputFile>"];
+  node_103 -> node_104;
+  node_10 -> node_103;
+  node_105 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_105;
+  node_106 [label="PARAGRAPH"];
+  node_107 [label="PLAIN_TEXT = <Первая строка содержит величину>"];
+  node_106 -> node_107;
+  node_108 [label="PLAIN_TEXT = <~>"];
+  node_106 -> node_108;
+  node_109 [label="INLINED_MATH_TEXT = <N>"];
+  node_106 -> node_109;
+  node_110 [label="PLAIN_TEXT = <~>"];
+  node_106 -> node_110;
+  node_111 [label="PLAIN_TEXT = <--->"];
+  node_106 -> node_111;
+  node_112 [label="PLAIN_TEXT = < количество
+символов в каждом фрагменте (>"];
+  node_106 -> node_112;
+  node_113 [label="INLINED_MATH_TEXT = <1 \\le N \\le 10^6>"];
+  node_106 -> node_113;
+  node_114 [label="PLAIN_TEXT = <).
+Далее следует незашифрованный и зашифрованный фрагменты.
+Зашифрованный фрагмент начинается с новой строки, но
+каждый из фрагментов может быть разбит на несколько строк произвольным образом.
+В>"];
+  node_106 -> node_114;
+  node_115 [label="PLAIN_TEXT = <~>"];
+  node_106 -> node_115;
+  node_116 [label="PLAIN_TEXT = <приведенных примерах символ>"];
+  node_106 -> node_116;
+  node_117 [label="PLAIN_TEXT = <~>"];
+  node_106 -> node_117;
+  node_118 [label="COMMAND = <name=texttt>"];
+  node_119 [label="ARGUMENT"];
+  node_120 [label="PLAIN_TEXT = <•>"];
+  node_119 -> node_120;
+  node_118 -> node_119;
+  node_106 -> node_118;
+  node_121 [label="PLAIN_TEXT = <, показывающий конец строки, добавлен для
+наглядности; в тестах этот символ отсутствует.>"];
+  node_106 -> node_121;
+  node_10 -> node_106;
+  node_122 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_122;
+  node_123 [label="PARAGRAPH"];
+  node_124 [label="COMMAND = <name=OutputFile>"];
+  node_123 -> node_124;
+  node_10 -> node_123;
+  node_125 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_125;
+  node_126 [label="PARAGRAPH"];
+  node_127 [label="PLAIN_TEXT = <Единственная строка должна содержать искомый ключ.
+Если задача имеет несколько решений, выведите наименьшее из них в
+лексикографическом порядке.>"];
+  node_126 -> node_127;
+  node_10 -> node_126;
+  node_128 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_128;
+  node_129 [label="PARAGRAPH"];
+  node_130 [label="COMMAND = <name=Examples>"];
+  node_129 -> node_130;
+  node_10 -> node_129;
+  node_131 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_131;
+  node_132 [label="ENVIRONMENT = <name=example end_name=example>"];
+  node_133 [label="PROGRAM"];
+  node_134 [label="PARAGRAPH"];
+  node_135 [label="PLAIN_TEXT = <>"];
+  node_134 -> node_135;
+  node_136 [label="COMMAND = <name=exmp>"];
+  node_137 [label="ARGUMENT"];
+  node_138 [label="PLAIN_TEXT = <>"];
+  node_137 -> node_138;
+  node_139 [label="PLAIN_TEXT = <8
+Crusader•
+Egrupagg•
+>"];
+  node_137 -> node_139;
+  node_136 -> node_137;
+  node_140 [label="ARGUMENT"];
+  node_141 [label="PLAIN_TEXT = <>"];
+  node_140 -> node_141;
+  node_142 [label="PLAIN_TEXT = <bow
+>"];
+  node_140 -> node_142;
+  node_136 -> node_140;
+  node_134 -> node_136;
+  node_143 [label="PLAIN_TEXT = <>"];
+  node_134 -> node_143;
+  node_144 [label="COMMAND = <name=exmp>"];
+  node_145 [label="ARGUMENT"];
+  node_146 [label="PLAIN_TEXT = <>"];
+  node_145 -> node_146;
+  node_147 [label="PLAIN_TEXT = <41
+To be or not t•
+o be? What is the question!•
+Yp ru aw oej ft cu?•
+>"];
+  node_145 -> node_147;
+  node_148 [label="PLAIN_TEXT = <~>"];
+  node_145 -> node_148;
+  node_149 [label="PLAIN_TEXT = <Mtfu yi fmf gkqxuyez!•
+>"];
+  node_145 -> node_149;
+  node_144 -> node_145;
+  node_150 [label="ARGUMENT"];
+  node_151 [label="PLAIN_TEXT = <>"];
+  node_150 -> node_151;
+  node_152 [label="PLAIN_TEXT = <apple
+>"];
+  node_150 -> node_152;
+  node_144 -> node_150;
+  node_134 -> node_144;
+  node_153 [label="PLAIN_TEXT = <>"];
+  node_134 -> node_153;
+  node_133 -> node_134;
+  node_132 -> node_133;
+  node_10 -> node_132;
+  node_154 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_154;
+  node_155 [label="PARAGRAPH"];
+  node_156 [label="COMMAND = <name=Note>"];
+  node_155 -> node_156;
+  node_10 -> node_155;
+  node_157 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_157;
+  node_158 [label="PARAGRAPH"];
+  node_159 [label="PLAIN_TEXT = <Необходимо придумать решение, не использующее алгоритм Дюваля, декомпозицию Линдона, суффиксный массив, суффиксное дерево, суффиксный автомат, преобразование >"];
+  node_158 -> node_159;
+  node_160 [label="COMMAND = <name=mbox>"];
+  node_161 [label="ARGUMENT"];
+  node_162 [label="PLAIN_TEXT = <Барроуза>"];
+  node_161 -> node_162;
+  node_163 [label="PLAIN_TEXT = <\\,>"];
+  node_161 -> node_163;
+  node_164 [label="PLAIN_TEXT = <-->"];
+  node_161 -> node_164;
+  node_165 [label="PLAIN_TEXT = <\\,>"];
+  node_161 -> node_165;
+  node_166 [label="PLAIN_TEXT = <Уиллера>"];
+  node_161 -> node_166;
+  node_160 -> node_161;
+  node_158 -> node_160;
+  node_167 [label="PLAIN_TEXT = < и прочие известные строковые алгоритмы и структуры данных.>"];
+  node_158 -> node_167;
+  node_10 -> node_158;
+  node_168 [label="PARAGRAPH_BREAKER"];
+  node_10 -> node_168;
   node_5 -> node_10;
   node_2 -> node_5;
-  node_72 [label="PARAGRAPH"];
-  node_73 [label="PLAIN_TEXT = <
+  node_169 [label="PARAGRAPH"];
+  node_170 [label="PLAIN_TEXT = <
 >"];
-  node_72 -> node_73;
-  node_2 -> node_72;
+  node_169 -> node_170;
+  node_2 -> node_169;
   node_1 -> node_2;
   node_0 -> node_1;
-  node_74 [label="PARAGRAPH"];
-  node_75 [label="PLAIN_TEXT = <
+  node_171 [label="PARAGRAPH"];
+  node_172 [label="PLAIN_TEXT = <
 >"];
-  node_74 -> node_75;
-  node_0 -> node_74;
+  node_171 -> node_172;
+  node_0 -> node_171;
 }

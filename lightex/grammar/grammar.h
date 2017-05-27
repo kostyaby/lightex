@@ -39,24 +39,26 @@ const auto unicode_symbol = x3::lexeme[x3::char_('&') >> +x3::alpha >> x3::char_
 const auto special_command_identifier =
     x3::lit("begin") | "end" | "newcommand" | "newenvironment" | "unescaped" | "nparagraph";
 const auto command_identifier = x3::lexeme['\\' >> (+x3::alpha - special_command_identifier)];
-const auto math_text_symbol = (x3::char_ - x3::char_('$'));
+const auto math_text_symbol = x3::lexeme[x3::lit('\\') >> x3::char_('$')] | (x3::char_ - x3::char_('$'));
 const auto environment_identifier = x3::lexeme[+x3::alpha] - "verbatim";
 const auto plain_text_symbol = control_symbol | (x3::char_ - special_symbol - x3::lit('\n'));
 const auto comment = x3::omit[x3::no_skip[x3::lit('%') >> *(x3::char_ - '\n') >> (x3::eol | x3::eoi)]];
+const auto lookup_table_symbol =
+    x3::string("\\,") | x3::string("~") | x3::string("---") | x3::string("--") | x3::string("<<") | x3::string(">>");
 
 const auto program_node_def = paragraph_breaker | paragraph | math_text | environment | verbatim_environment |
                               command_macro | environment_macro | argument_ref | outer_argument_ref | comment;
 
-const auto plain_text_def =
-    x3::no_skip[unicode_symbol | x3::string("\n") |
-                (+(-x3::char_('\n') >> plain_text_symbol) >> -(&(!paragraph_breaker) >> x3::char_('\n')))];
+const auto plain_text_def = x3::no_skip[lookup_table_symbol | unicode_symbol | x3::string("\n") |
+                                        (+(-x3::char_('\n') >> (&(!lookup_table_symbol) >> plain_text_symbol)) >>
+                                         -(&(!paragraph_breaker) >> x3::char_('\n')))];
 
 const auto paragraph_node_def = &(!paragraph_breaker) >>
                                 (plain_text | inlined_math_text | command | unescaped_command | nparagraph_command |
                                  comment);
 
-const auto argument_node_def = comment | plain_text | inlined_math_text | command | unescaped_command | nparagraph_command |
-                               argument_ref | outer_argument_ref;
+const auto argument_node_def = comment | plain_text | inlined_math_text | command | unescaped_command |
+                               nparagraph_command | argument_ref | outer_argument_ref;
 
 const auto program_def = *program_node;
 

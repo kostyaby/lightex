@@ -1,36 +1,11 @@
-  <!DOCTYPE html>  <html>  <head>  <link rel="stylesheet" type="text/css" href="" />  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous">  </script>  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  <body> <p> </p>   <p>Найти вершины, через которые проходит нечётное число наибольших полупутей, и удалить (правым удалением) ту из них, ключ которой наибольший.</p><p>Если в дереве нет вершин, удовлетворяющих нужному свойству, то ничего удалять не требуется. Выполнить прямой (левый) обход полученного дерева.</p><h2>Формат входного файла</h2><p>Входной файл содержит последовательность чисел&nbsp;&mdash; ключи вершин в порядке добавления в дерево. Гарантируется, что в дереве не менее двух вершин.</p><h2>Формат выходного файла</h2><p>Выходной файл должен содержать последовательность ключей вершин, полученную прямым левым обходом итогового дерева.</p><h2>Пример</h2><p>% this is not a comment</p><pre>
-1
-2 % Comments are visible in verbatim
-3
-4
-5
-</pre>  <table class="inputs-outputs">  <tr>  <th>  input.txt  </th>  <th>  output.txt  </th>  </tr>  <p>  <tr>  <td>  <pre>10
-5
-20
-4
-6
-15
-30
-3
-7
-14
-40
-8
-50
-9
-60
-</pre>  </td>  <td>  <pre>10
-5
-4
-3
-6
-7
-8
-9
-20
-15
-14
-30
-40
-50
-</pre>  </td>  </tr>  </p></table><p></p><div style="text-align: center;"><p> <img src="/fIpZ6d9gT5GYgPFox3cO/tst01-1.GIF" /></p></div><p> </p> <p> </p>  </body>  </html> <p> </p>
+  <!DOCTYPE html>  <html>  <head>  <link rel="stylesheet" type="text/css" href="" />  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous">  </script>  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  <body>     <p>Доминошка&nbsp;&mdash; это прямоугольная плитка, лицевая сторона которой разделена на два квадрата, каждый из которых содержит от 0 до 6 точек. Ряд доминошек выложен на столе:</p><div style="text-align: center;"> <pre>
+6 1 1 1
+- - - -
+1 5 3 2
+</pre> </div><p>Число точек в верхней строке равно <span id="mathTextSpan1"></span><script type="text/javascript">katex.render("6 + 1 + 1 + 1 = 9", document.getElementById("mathTextSpan1"), {displayMode: false});</script>, а в нижней&nbsp;&mdash; <span id="mathTextSpan2"></span><script type="text/javascript">katex.render("1 + 5 + 3 + 2 = 11", document.getElementById("mathTextSpan2"), {displayMode: false});</script>. Разница между нижней и верхней строкой составляет <span id="mathTextSpan3"></span><script type="text/javascript">katex.render("|11 - 9| = 2", document.getElementById("mathTextSpan3"), {displayMode: false});</script>. Разница&nbsp;&mdash; это абсолютная величина разности двух сумм. Каждая доминошка может быть повёрнута на <span id="mathTextSpan4"></span><script type="text/javascript">katex.render("180^{\u005ccirc}", document.getElementById("mathTextSpan4"), {displayMode: false});</script>, меняя местами верхний и нижний квадраты.</p><p>Необходимо определить, какое минимальное число поворотов необходимо для минимизации разницы. В&nbsp;приведённом примере нужно повернуть последнюю доминошку для того, чтобы уменьшить разницу до нуля. В&nbsp;этом случае ответом будет&nbsp;1.</p><h2>Формат входного файла</h2><p>Первая строка содержит число <span id="mathTextSpan5"></span><script type="text/javascript">katex.render("n", document.getElementById("mathTextSpan5"), {displayMode: false});</script> доминошек, лежащих на столе (<span id="mathTextSpan6"></span><script type="text/javascript">katex.render("1 \u005cle n \u005cle 250\u005c,000", document.getElementById("mathTextSpan6"), {displayMode: false});</script>). Каждая из следующих <span id="mathTextSpan7"></span><script type="text/javascript">katex.render("n", document.getElementById("mathTextSpan7"), {displayMode: false});</script>&nbsp;строк содержит по два целых числа <span id="mathTextSpan8"></span><script type="text/javascript">katex.render("a", document.getElementById("mathTextSpan8"), {displayMode: false});</script> и <span id="mathTextSpan9"></span><script type="text/javascript">katex.render("b", document.getElementById("mathTextSpan9"), {displayMode: false});</script>, разделённых пробелом (<span id="mathTextSpan10"></span><script type="text/javascript">katex.render("0 \u005cle a, b \u005cle 6", document.getElementById("mathTextSpan10"), {displayMode: false});</script>). Числа <span id="mathTextSpan11"></span><script type="text/javascript">katex.render("a", document.getElementById("mathTextSpan11"), {displayMode: false});</script> и <span id="mathTextSpan12"></span><script type="text/javascript">katex.render("b", document.getElementById("mathTextSpan12"), {displayMode: false});</script>, записанные в <span id="mathTextSpan13"></span><script type="text/javascript">katex.render("(i + 1)", document.getElementById("mathTextSpan13"), {displayMode: false});</script>-й строке определяют число точек на <span id="mathTextSpan14"></span><script type="text/javascript">katex.render("i", document.getElementById("mathTextSpan14"), {displayMode: false});</script>-й доминошке в верхнем и нижнем квадратах соответственно.</p><h2>Формат выходного файла</h2><p>Выведите наименьшее число поворотов, необходимых для минимизации разности.</p><h2>Пример</h2>  <table class="inputs-outputs">  <tr>  <th>  input.txt  </th>  <th>  output.txt  </th>  </tr>  <p>  <tr>  <td>  <pre>4
+6 1
+1 5
+1 3
+1 2
+</pre>  </td>  <td>  <pre>1
+</pre>  </td>  </tr>  </p></table>    </body>  </html>  
