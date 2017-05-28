@@ -253,7 +253,10 @@ Result HtmlVisitor::operator()(const ast::UnescapedCommand& unescaped_command) {
 Result HtmlVisitor::operator()(const ast::NparagraphCommand& nparagraph_command) {
   Result result = (*this)(nparagraph_command.body);
 
-  result.breaks_paragraph = true;
+  if (result.is_successful) {
+    result.breaks_paragraph = true;
+  }
+
   return result;
 }
 

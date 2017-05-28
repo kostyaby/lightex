@@ -14,7 +14,7 @@
 
 \newcommand{\mbox}[1]{\unescaped{<span style="white-space: nowrap">}#1\unescaped{</span>}}
 
-\newenvironment{center}{\unescaped{<div style="text-align: center;">}}{\unescaped{</div>}}
+\newenvironment{center}{\unescaped{<div class="center-block">}}{\unescaped{</div>}}
 
 \newenvironment{itemize}{
   \newcommand{\item}{\unescaped{</li>}\unescaped{<li>}}
@@ -91,6 +91,7 @@
 \newenvironment{rawproblem}[2]{
     \newenvironment{example}{
         \newcommand{\exmp}[2]{
+                              \nparagraph{
                               \unescaped{<tr>}
                                 \unescaped{<td>}
                                   \unescaped{<pre>#1</pre>}
@@ -98,9 +99,8 @@
                                 \unescaped{<td>}
                                   \unescaped{<pre>#2</pre>}
                                 \unescaped{</td>}
-                              \unescaped{</tr>}
+                              \unescaped{</tr>}}
                               }
-
         \unescaped{<table class="inputs-outputs">}
           \unescaped{<tr>}
             \unescaped{<th>}
