@@ -35,7 +35,7 @@ namespace {
 BOOST_AUTO_TEST_CASE(TestSimple) {
   Tester t;
   t.check("", "");
-  t.check(" ", "<p> </p>");
+  t.check(" ", " ");
   t.check("hello", "<p>hello</p>");
   t.check("hello\n\n", "<p>hello</p>");
   t.check("hello world", "<p>hello world</p>");
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(TestSimple) {
 
 BOOST_AUTO_TEST_CASE(TestComments) {
   Tester t;
-  t.check("% this is a comment", "<p></p>");
+  t.check("% this is a comment", "");
   t.check("\\% this is a percent sign", "<p>% this is a percent sign</p>");
 
   t.check("a%\nb", "<p>ab</p>");
